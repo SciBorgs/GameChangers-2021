@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.command.SwerveDriveJoystickCommand;
 import frc.robot.subsytem.SwerveDrive.SwerveDriveSubsystem;
 
@@ -12,7 +13,9 @@ public class Robot extends TimedRobot {
 
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    Scheduler.getInstance().run();
+  }
 
   @Override
   public void autonomousInit() { }
