@@ -27,7 +27,7 @@ public class SwerveSubsystem extends SubsystemBase
     public Module(int drivenSparkPort,
                   int steeringSparkPort,
                   int steeringEncoderPort,
-                  boolean steeringEncoderFlipped)
+                  boolean flipSteeringEncoder)
     {
       final double DRIVEN_SPARK_GEAR_RATIO     = 3.0 / 40;
       final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
@@ -40,7 +40,7 @@ public class SwerveSubsystem extends SubsystemBase
       steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
                                                STEERING_ENCODER_GEAR_RATIO,
                                                Math.toRadians(90),
-                                               steeringEncoderFlipped);
+                                               flipSteeringEncoder);
 
       steeringAnglePID = new PID(0.82, 0, 0);
       /* clang-format on */
@@ -59,12 +59,12 @@ public class SwerveSubsystem extends SubsystemBase
       int drivenSparkPort            = moduleRow[0];
       int steeringSparkPort          = moduleRow[1];
       int steeringEncoderPort        = moduleRow[2];
-      boolean steeringEncoderFlipped = moduleRow[3] == 1 ? true : false;
+      boolean flipSteeringEncoder = moduleRow[3] == 1 ? true : false;
 
       modules[i] = new Module(drivenSparkPort,
                               steeringSparkPort,
                               steeringEncoderPort,
-                              steeringEncoderFlipped);
+                              flipSteeringEncoder);
     }
   }
 
@@ -124,8 +124,8 @@ public class SwerveSubsystem extends SubsystemBase
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
 
-      System.out.println(this.getClass().getSimpleName() + ": "
-                         + "SETTING " + i + " TO " + mod.desiredWheelSpeed +
+      System.out.println(this.getClass().getSimpleName() + ":"
+                         + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
                          " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
                          " DEGREES");
 
