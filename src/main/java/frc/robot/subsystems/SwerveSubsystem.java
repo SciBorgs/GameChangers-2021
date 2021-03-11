@@ -122,7 +122,8 @@ public class SwerveSubsystem extends SubsystemBase
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
 
-      System.out.println("MODULE: " + i + " SPEED: " + mod.desiredWheelSpeed + " ANGLE: " + Math.toDegrees(mod.desiredSteeringAngle));
+      System.out.println("MODULE: " + i + " SPEED: " + mod.desiredWheelSpeed +
+                         " ANGLE: " + Math.toDegrees(mod.desiredSteeringAngle));
 
       // mod.drivenSpark.set(mod.desiredWheelSpeed);
       // mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
