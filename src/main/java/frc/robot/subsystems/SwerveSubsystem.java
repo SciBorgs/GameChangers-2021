@@ -12,6 +12,8 @@ import java.util.Comparator;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+  private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
+
   private static class Module
   {
     private SciSpark drivenSpark;
@@ -49,8 +51,6 @@ public class SwerveSubsystem extends SubsystemBase
 
   public SwerveSubsystem()
   {
-    final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
-
     modules = new Module[MODULE_COUNT];
 
     for (int i = 0; i < MODULE_COUNT; ++i) {
@@ -117,12 +117,19 @@ public class SwerveSubsystem extends SubsystemBase
         .get()
         .desiredWheelSpeed;
 
-    for (Module mod : modules) {
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+
       if (maxDesWheelSpeed > 1) {
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
 
-      mod.drivenSpark.set(mod.desiredWheelSpeed);
+      System.out.println(this.getClass().getSimpleName() + ": "
+                         + "SETTING " + i + " TO " + mod.desiredWheelSpeed +
+                         " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
+                         " DEGREES");
+
+      // mod.drivenSpark.set(mod.desiredWheelSpeed);
       mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
         mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
     }
