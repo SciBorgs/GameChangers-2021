@@ -5,7 +5,6 @@ import frc.robot.util.SciMath;
 
 public class SciSpark extends CANSparkMax
 {
-
   public SciSpark(int port)
   {
     this(port, 1);
