@@ -12,7 +12,7 @@ public class Robot extends TimedRobot
 
   @Override public void robotInit()
   {
-    swerveSubsystem = new SwerveSubsystem();
+    swerveSubsystem       = new SwerveSubsystem();
     swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
   }
 
@@ -29,7 +29,10 @@ public class Robot extends TimedRobot
 
   @Override public void autonomousPeriodic() {}
 
-  @Override public void teleopInit() {}
+  @Override public void teleopInit()
+  {
+    swerveJoystickCommand.schedule();
+  }
 
   @Override public void teleopPeriodic()
   {
