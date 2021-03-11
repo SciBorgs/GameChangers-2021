@@ -25,12 +25,12 @@ public class SwerveDriveSubsystem {
 
     Module BR = new Module(Hardware.createSparkMax(5, 3.0 / 40), 
                            Hardware.createSparkMax(6, 1.0 / 60), 
-                           new AbsoluteEncoder(1, 1.0 / 5, MathHelper.degreesToRadians(90), true), 
+                           new AbsoluteEncoder(1, 1.0 / 5, MathHelper.degreesToRadians(90), false), 
                            new PID(0.82, 0, 0));   
     
     Module FL = new Module(Hardware.createSparkMax(3, 3.0 / 40), 
                            Hardware.createSparkMax(4, 1.0 / 60), 
-                           new AbsoluteEncoder(3, 1.0 / 5, MathHelper.degreesToRadians(90), true), 
+                           new AbsoluteEncoder(3, 1.0 / 5, MathHelper.degreesToRadians(90), false), 
                            new PID(0.82, 0, 0));
 
     Module FR = new Module(Hardware.createSparkMax(7, 3.0 / 40), 
