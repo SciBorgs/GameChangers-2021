@@ -4,7 +4,7 @@ public class MathHelper {
     
     
     public static double normalizeAngle(double angle) {
-        return angle < 0 ? angle + 2 * Math.PI : angle;
+        return normalize(angle, 0, 2 * Math.PI);
     }
 
     public static double normalize(double val, double begin, double end) {
