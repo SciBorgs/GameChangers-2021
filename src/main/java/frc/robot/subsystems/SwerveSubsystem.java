@@ -39,6 +39,8 @@ public class SwerveSubsystem extends SubsystemBase
                                                STEERING_ENCODER_GEAR_RATIO,
                                                Math.toRadians(90),
                                                steeringEncoderFlipped);
+
+      steeringAnglePID = new PID(0.82, 0, 0);
       /* clang-format on */
     }
   }
