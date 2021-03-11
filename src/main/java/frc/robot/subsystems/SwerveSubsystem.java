@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
 import frc.robot.RobotMap;
-import frc.robot.hardware.SciAbsoluteEncoder;
-import frc.robot.hardware.SciSpark;
+// import frc.robot.hardware.SciAbsoluteEncoder;
+// import frc.robot.hardware.SciSpark;
 import frc.robot.util.PID;
 import frc.robot.util.SciMath;
 import java.util.Arrays;
@@ -12,12 +12,14 @@ import java.util.Comparator;
 
 public class SwerveSubsystem extends SubsystemBase
 {
+  private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
+
   private static class Module
   {
-    private SciSpark drivenSpark;
-    private SciSpark steeringSpark;
-    private SciAbsoluteEncoder steeringEncoder;
-    private PID steeringAnglePID;
+    // private SciSpark drivenSpark;
+    // private SciSpark steeringSpark;
+    // private SciAbsoluteEncoder steeringEncoder;
+    // private PID steeringAnglePID;
 
     private double desiredWheelSpeed;
     private double desiredSteeringAngle;
@@ -32,13 +34,13 @@ public class SwerveSubsystem extends SubsystemBase
       final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
 
       /* clang-format off */
-      drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
-      steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
+      // drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
+      // steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
       
-      steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
-                                               STEERING_ENCODER_GEAR_RATIO,
-                                               Math.toRadians(90),
-                                               steeringEncoderFlipped);
+      // steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
+      //                                          STEERING_ENCODER_GEAR_RATIO,
+      //                                          Math.toRadians(90),
+      //                                          steeringEncoderFlipped);
       /* clang-format on */
     }
   }
@@ -47,8 +49,6 @@ public class SwerveSubsystem extends SubsystemBase
 
   public SwerveSubsystem()
   {
-    final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
-
     modules = new Module[MODULE_COUNT];
 
     for (int i = 0; i < MODULE_COUNT; ++i) {
@@ -115,14 +115,18 @@ public class SwerveSubsystem extends SubsystemBase
         .get()
         .desiredWheelSpeed;
 
-    for (Module mod : modules) {
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+
       if (maxDesWheelSpeed > 1) {
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
 
-      mod.drivenSpark.set(mod.desiredWheelSpeed);
-      mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
-        mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
+      System.out.println("MODULE: " + i + " SPEED: " + mod.desiredWheelSpeed + " ANGLE: " + Math.toDegrees(mod.desiredSteeringAngle));
+
+      // mod.drivenSpark.set(mod.desiredWheelSpeed);
+      // mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
+      // mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
     }
   }
 }

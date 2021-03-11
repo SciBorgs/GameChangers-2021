@@ -2,10 +2,19 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.SwerveSubsystem;
 
 public class Robot extends TimedRobot
 {
-  @Override public void robotInit() {}
+  private SwerveSubsystem swerveSubsystem;
+  private SwerveJoystickCommand swerveJoystickCommand;
+
+  @Override public void robotInit()
+  {
+    swerveSubsystem = new SwerveSubsystem();
+    swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
+  }
 
   @Override public void robotPeriodic()
   {
@@ -22,7 +31,10 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit() {}
 
-  @Override public void teleopPeriodic() {}
+  @Override public void teleopPeriodic()
+  {
+    swerveJoystickCommand.schedule();
+  }
 
   @Override public void testInit() {}
 
