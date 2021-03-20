@@ -15,7 +15,7 @@ import java.util.Comparator;
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
-  private GenericHID controller = new XboxController(0);
+  private XboxController xbox = new XboxController(0);
 
   private static class Module
   {
@@ -75,11 +75,9 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void joystickDrive()
   {
-    // drive(controller.getRawAxis(0)/5, 
-    //      -controller.getRawAxis(1)/5, 
-    //       controller.getRawAxis(2)/5); 
+    drive(xbox.getX(GenericHID.Hand.kLeft) / 5, -xbox.getY(GenericHID.Hand.kRight) / 5, xbox.getX(GenericHID.Hand.kRight) / 5);
     
-    drive(0.1, 0.1, 0);
+    // drive(0.1, 0.1, 0);
   }
 
   private void drive(double latVel, double longVel, double omega)
@@ -92,19 +90,19 @@ public class SwerveSubsystem extends SubsystemBase
     final int FL_IDX = 2;
     final int FR_IDX = 3;
 
-    Pair<Double, Double> wheelLatV = new Pair<>(
+    Pair<Double, Double> wheelLatVel = new Pair<>(
       latVel - omega * HALF_TRACK_LENGTH, latVel + omega * HALF_TRACK_LENGTH);
-    Pair<Double, Double> wheelLongV = new Pair<>(
+    Pair<Double, Double> wheelLongVel = new Pair<>(
       longVel + omega * HALF_TRACK_WIDTH, longVel - omega * HALF_TRACK_WIDTH);
 
     setDesiredModuleStrategy(
-      modules[BL_IDX], wheelLatV.getFirst(), wheelLongV.getFirst());
+      modules[BL_IDX], wheelLatVel.getFirst(), wheelLongVel.getFirst());
     setDesiredModuleStrategy(
-      modules[BR_IDX], wheelLatV.getFirst(), wheelLongV.getSecond());
+      modules[BR_IDX], wheelLatVel.getFirst(), wheelLongVel.getSecond());
     setDesiredModuleStrategy(
-      modules[FL_IDX], wheelLatV.getSecond(), wheelLongV.getFirst());
+      modules[FL_IDX], wheelLatVel.getSecond(), wheelLongVel.getFirst());
     setDesiredModuleStrategy(
-      modules[FR_IDX], wheelLatV.getSecond(), wheelLongV.getSecond());
+      modules[FR_IDX], wheelLatVel.getSecond(), wheelLongVel.getSecond());
 
     executeDesiredModuleStrategies();
   }
