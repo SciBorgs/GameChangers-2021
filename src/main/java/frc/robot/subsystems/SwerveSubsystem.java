@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
 import frc.robot.RobotMap;
@@ -13,6 +15,7 @@ import java.util.Comparator;
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
+  private GenericHID controller = new XboxController(0);
 
   private static class Module
   {
@@ -23,6 +26,7 @@ public class SwerveSubsystem extends SubsystemBase
 
     private double desiredWheelSpeed;
     private double desiredSteeringAngle;
+
 
     public Module(int drivenSparkPort,
                   int steeringSparkPort,
@@ -65,11 +69,16 @@ public class SwerveSubsystem extends SubsystemBase
                               steeringSparkPort,
                               steeringEncoderPort,
                               flipSteeringEncoder);
+      modules[i].drivenSpark.setInverted(true);
     }
   }
 
   public void joystickDrive()
   {
+    // drive(controller.getRawAxis(0)/5, 
+    //      -controller.getRawAxis(1)/5, 
+    //       controller.getRawAxis(2)/5); 
+    
     drive(0.1, 0.1, 0);
   }
 
@@ -129,7 +138,7 @@ public class SwerveSubsystem extends SubsystemBase
                          " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
                          " DEGREES");
 
-      // mod.drivenSpark.set(mod.desiredWheelSpeed);
+      mod.drivenSpark.set(mod.desiredWheelSpeed);
       mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
         mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
     }
