@@ -14,8 +14,12 @@ public class Robot extends TimedRobot
   // private SwerveJoystickCommand swerveJoystickCommand;
   final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
   final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
+
+  final double SHOOTER_SPARK_GEAR_RATIO    = 1.0 / 1.0;
+  final double HOPPER_SPARK_GEAR_RATIO     = 1.0 / 63;
+
   
-  private SciSpark steeringSpark1;
+  private SciSpark steeringSpark1, shooterSpark1, shooterSpark2, hopperSpark;
   private SciAbsoluteEncoder steeringEncoder;
 
   private PID steeringAnglePID;
@@ -24,8 +28,15 @@ public class Robot extends TimedRobot
   {
     //swerveSubsystem       = new SwerveSubsystem();
     //swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
-    steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
-    steeringEncoder = new SciAbsoluteEncoder(3,
+    steeringSpark1 = new SciSpark(8, STEERING_SPARK_GEAR_RATIO);
+    shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
+    shooterSpark2 = new SciSpark(10, SHOOTER_SPARK_GEAR_RATIO);
+    hopperSpark = new SciSpark(9, HOPPER_SPARK_GEAR_RATIO);
+    hopperSpark.setInverted(true);
+    shooterSpark1.setInverted(true); 
+    shooterSpark2.setInverted(true); 
+
+    steeringEncoder = new SciAbsoluteEncoder(2,
                                              STEERING_ENCODER_GEAR_RATIO,
                                              Math.toRadians(90),
                                              false);
@@ -52,10 +63,17 @@ public class Robot extends TimedRobot
 
   @Override public void teleopPeriodic() 
   {
-     double output = steeringAnglePID.getOutput(Math.toRadians(270), steeringEncoder.getAngle());
-    steeringSpark1.set(output);
+    //double output = steeringAnglePID.getOutput(Math.toRadians(270), steeringEncoder.getAngle());
+    // System.out.println("getDistance(): " + Math.toDegrees(steeringEncoder.rawEncoder.getDistance()));
+    // System.out.println("get(): " + steeringEncoder.rawEncoder.get());
+    // System.out.println("getPositionOffest(): " + steeringEncoder.rawEncoder.getPositionOffset());
+    // System.out.println("getAngle(): " + Math.toDegrees(steeringEncoder.getAngle()));
+    //steeringSpark1.set(output);
     // System.out.println(steeringAnglePID.getOutput(Math.toDegrees(steeringEncoder.getAngle()), 45));
     // System.out.println(Math.toDegrees(steeringEncoder.getAngle()));
+    //hopperSpark.set(.1);
+    shooterSpark1.set(.1);
+    shooterSpark2.set(.1);
   }
 
   @Override public void testInit() {}
