@@ -9,7 +9,7 @@ public final class RobotMap
     {        1,                   2,                   0,                 1        }, /* BL */
     {        5,                   6,                   1,                 0        }, /* BR */
     {        3,                   4,                   3,                 0        }, /* FL */
-    {        7,                   8,                   2,                 1        }  /* FR */
+    {        7,                   8,                   6,                 1        }  /* FR */
 
     /* clang-format on */
   };

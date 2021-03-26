@@ -75,9 +75,9 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void joystickDrive()
   {
-    drive(xbox.getX(GenericHID.Hand.kLeft) / 5, -xbox.getY(GenericHID.Hand.kRight) / 5, xbox.getX(GenericHID.Hand.kRight) / 5);
+    // drive(xbox.getX(GenericHID.Hand.kLeft) / 5, -xbox.getY(GenericHID.Hand.kRight) / 5, xbox.getX(GenericHID.Hand.kRight) / 5);
     
-    // drive(0.1, 0.1, 0);
+    drive(0, 0, 0);
   }
 
   private void drive(double latVel, double longVel, double omega)
@@ -131,14 +131,25 @@ public class SwerveSubsystem extends SubsystemBase
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
 
-      System.out.println(this.getClass().getSimpleName() + ":"
-                         + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
-                         " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
-                         " DEGREES");
+      // optimized angle code?
+      // double dir = mod.desiredSteeringAngle % 360.0 - mod.steeringEncoder.getAngle() % 360.0;
+      // double sign = Math.signum(dir);
+      
+      //System.out.println(this.getClass().getSimpleName() + ":"
+      //                   + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
+      //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
+      //                   " DEGREES");                  
 
       mod.drivenSpark.set(mod.desiredWheelSpeed);
       mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
         mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
+      
+      System.out.println("get(): " + " GETTING " + i + " TO " + mod.steeringSpark.get() +
+      " AND " + Math.toDegrees(mod.steeringEncoder.getAngle()) +
+      " DEGREES");
+      // optimized angle code?
+      //mod.steeringSpark.set(sign * mod.steeringAnglePID.getOutput(
+      //  SciMath.normalizeAngle(mod.desiredSteeringAngle - mod.steeringEncoder.getAngle()), 0));
     }
   }
 }
