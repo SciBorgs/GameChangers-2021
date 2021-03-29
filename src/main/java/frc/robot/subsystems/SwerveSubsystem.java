@@ -80,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase
     drive(0, 0, 0);
   }
 
-  private void drive(double latVel, double longVel, double omega)
+  public void drive(double latVel, double longVel, double omega)
   {
     final double HALF_TRACK_LENGTH = 30 / 2;
     final double HALF_TRACK_WIDTH  = 29.579 / 2;
