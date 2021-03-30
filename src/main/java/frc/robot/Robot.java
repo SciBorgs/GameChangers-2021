@@ -12,13 +12,15 @@ public class Robot extends TimedRobot
 {
   private SwerveSubsystem swerveSubsystem;
   private SwerveJoystickCommand swerveJoystickCommand;
-  final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
-  final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
+  final double STEERING_SPARK_GEAR_RATIO    = 1.0 / 60;
+  final double STEERING_ENCODER_GEAR_RATIO  = 1.0 / 5;
+  final double INTAKE_FLYWHEEL_GEAR_RATIO   = 1.0 / 9;
+  final double INTAKE_RETRACTION_GEAR_RATIO = 1.0 / 60; //unknown
 
   final double SHOOTER_SPARK_GEAR_RATIO    = 1.0 / 1.0;
   final double HOPPER_SPARK_GEAR_RATIO     = 1.0 / 63;
 
-  private SciSpark steeringSpark1, shooterSpark1, shooterSpark2, hopperSpark, testSpark;
+  private SciSpark steeringSpark1, shooterSpark1, shooterSpark2, hopperSpark, intakeFlywheelSpark;
   private SciAbsoluteEncoder steeringEncoder;
 
   private PID steeringAnglePID;
@@ -27,7 +29,7 @@ public class Robot extends TimedRobot
   {
     swerveSubsystem       = new SwerveSubsystem();
     swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
-    // steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
+    //steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
     //shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
     //shooterSpark2 = new SciSpark(10, SHOOTER_SPARK_GEAR_RATIO);
     //hopperSpark = new SciSpark(9, HOPPER_SPARK_GEAR_RATIO);
@@ -35,8 +37,8 @@ public class Robot extends TimedRobot
     //shooterSpark1.setInverted(true); 
     //shooterSpark2.setInverted(true); 
 
-    //testSpark = new SciSpark(11);
-    //testSpark.setInverted(true);
+    //intakeFlywheelSpark = new SciSpark(16, INTAKE_FLYWHEEL_GEAR_RATIO);
+    //intakeFlywheelSpark.setInverted(true);
 
     // steeringEncoder = new SciAbsoluteEncoder(3,
     //                                          STEERING_ENCODER_GEAR_RATIO,
@@ -62,6 +64,7 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit()
   {
+    swerveSubsystem.setZero();
     swerveJoystickCommand.schedule();
   }
 
@@ -74,8 +77,8 @@ public class Robot extends TimedRobot
     //hopperSpark.set(.1);
     //shooterSpark1.set(.1);
     //shooterSpark2.set(.1);
-    //System.out.println(testSpark.getEncoder().getVelocity());
-    //testSpark.set(.1);
+    //System.out.println(intakeFlywheelSpark.getEncoder().getVelocity());
+    //intakeFlywheelSpark.set(1);
   }
 
   @Override public void testInit() {}

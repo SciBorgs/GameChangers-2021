@@ -43,15 +43,17 @@ public class SwerveSubsystem extends SubsystemBase
       
       steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
                                                STEERING_ENCODER_GEAR_RATIO,
-                                               Math.toRadians(90),
+                                               Math.toRadians(0),
                                                flipSteeringEncoder);
+      System.out.println("initial angle: " + Math.toDegrees(steeringEncoder.getAngle()));
 
       steeringAnglePID = new PID(0.82, 0, 0);
+
       /* clang-format on */
     }
   }
 
-  private Module[] modules;
+  public Module[] modules;
 
   public SwerveSubsystem()
   {
@@ -75,15 +77,30 @@ public class SwerveSubsystem extends SubsystemBase
 
   public void joystickDrive()
   {
-    // drive(xbox.getX(GenericHID.Hand.kLeft) / 5, -xbox.getY(GenericHID.Hand.kRight) / 5, xbox.getX(GenericHID.Hand.kRight) / 5);
+    //if((xbox.getX(GenericHID.Hand.kLeft) < .2) && (xbox.getX(GenericHID.Hand.kLeft) > -.2) &&
+    //   (xbox.getY(GenericHID.Hand.kLeft) < .2) && (xbox.getY(GenericHID.Hand.kLeft) > -.2) &&
+    //   (xbox.getX(GenericHID.Hand.kRight) < .2) && (xbox.getX(GenericHID.Hand.kRight) > -.2)){
+    //  return;
+    //} 
+    // drive(xbox.getX(GenericHID.Hand.kLeft) / 5, 
+    //       -xbox.getY(GenericHID.Hand.kLeft) / 5, 
+    //       xbox.getRawAxis(2) / 5);
     
-    drive(0, 0, 0);
+    // drive(0, 0, xbox.getRawAxis(2) / 5);
+    drive(xbox.getRawAxis(0), -xbox.getRawAxis(1), 0);
+    // drive(.1, .1, 0);
   }
 
   public void drive(double latVel, double longVel, double omega)
   {
-    final double HALF_TRACK_LENGTH = 30 / 2;
-    final double HALF_TRACK_WIDTH  = 29.579 / 2;
+    // System.out.println(omega);
+    //final double TRACK_LENGTH = 30;
+    //final double TRACK_WIDTH  = 29.579;
+    final double TRACK_LENGTH = 1;
+    final double TRACK_WIDTH = 1;
+
+    double diagonal = Math.sqrt(Math.pow(TRACK_LENGTH, 2) + 
+                                Math.pow(TRACK_WIDTH,2));
 
     final int BL_IDX = 0;
     final int BR_IDX = 1;
@@ -91,9 +108,12 @@ public class SwerveSubsystem extends SubsystemBase
     final int FR_IDX = 3;
 
     Pair<Double, Double> wheelLatVel = new Pair<>(
-      latVel - omega * HALF_TRACK_LENGTH, latVel + omega * HALF_TRACK_LENGTH);
+      latVel - (omega * TRACK_LENGTH / diagonal), latVel + (omega * TRACK_LENGTH / diagonal));
+      //System.out.println("latVel1: " + wheelLatVel.getFirst() + "\t latVel2: " + wheelLatVel.getSecond());
+
     Pair<Double, Double> wheelLongVel = new Pair<>(
-      longVel + omega * HALF_TRACK_WIDTH, longVel - omega * HALF_TRACK_WIDTH);
+      longVel + (omega * TRACK_WIDTH / diagonal), longVel - (omega * TRACK_WIDTH / diagonal));
+      //System.out.println("longVel1: " + wheelLongVel.getFirst() + "\t longVel2: " + wheelLongVel.getSecond());
 
     setDesiredModuleStrategy(
       modules[BL_IDX], wheelLatVel.getFirst(), wheelLongVel.getFirst());
@@ -130,26 +150,36 @@ public class SwerveSubsystem extends SubsystemBase
       if (maxDesWheelSpeed > 1) {
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
+    
+      // System.out.println(this.getClass().getSimpleName() + ":"
+      //                    + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
+      //                    " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
+      //                    " DEGREES");                  
 
       // optimized angle code?
-      // double dir = mod.desiredSteeringAngle % 360.0 - mod.steeringEncoder.getAngle() % 360.0;
-      // double sign = Math.signum(dir);
-      
-      //System.out.println(this.getClass().getSimpleName() + ":"
-      //                   + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
-      //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
-      //                   " DEGREES");                  
 
       mod.drivenSpark.set(mod.desiredWheelSpeed);
-      mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
-        mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
       
-      System.out.println("get(): " + " GETTING " + i + " TO " + mod.steeringSpark.get() +
-      " AND " + Math.toDegrees(mod.steeringEncoder.getAngle()) +
-      " DEGREES");
-      // optimized angle code?
-      //mod.steeringSpark.set(sign * mod.steeringAnglePID.getOutput(
-      //  SciMath.normalizeAngle(mod.desiredSteeringAngle - mod.steeringEncoder.getAngle()), 0));
+      double difference_angle = SciMath.normalizeAngle(mod.desiredSteeringAngle) - SciMath.normalizeAngle(mod.steeringEncoder.getAngle());
+      if (Math.abs(difference_angle) > Math.PI) {
+        double sign = Math.signum(difference_angle);
+        difference_angle -= sign * 2 * Math.PI; 
+      }
+
+      // difference angle is somewhere between -PI and PI
+      double output = mod.steeringAnglePID.getOutput(difference_angle, 0);
+      mod.steeringSpark.set(output);
+
+      // System.out.println("desSteeringAngle " + i + ": " + mod.desiredSteeringAngle);
+    }
+  }
+
+  public void setZero () {
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+      mod.drivenSpark.set(0);
+      mod.steeringSpark.set(0);
     }
   }
 }
+
