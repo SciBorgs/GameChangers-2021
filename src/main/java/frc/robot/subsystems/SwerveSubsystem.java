@@ -17,15 +17,15 @@ public class SwerveSubsystem extends SubsystemBase
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
   private XboxController xbox = new XboxController(0);
 
-  private static class Module
+  public static class Module
   {
     private SciSpark drivenSpark;
     private SciSpark steeringSpark;
     private SciAbsoluteEncoder steeringEncoder;
     private PID steeringAnglePID;
 
-    private double desiredWheelSpeed;
-    private double desiredSteeringAngle;
+    public double desiredWheelSpeed;
+    public double desiredSteeringAngle;
 
 
     public Module(int drivenSparkPort,
