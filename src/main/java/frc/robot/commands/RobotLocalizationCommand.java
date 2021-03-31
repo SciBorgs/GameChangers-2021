@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj.Timer;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import java.lang.Math;
 
 public class RobotLocalizationCommand extends CommandBase
@@ -12,6 +13,7 @@ public class RobotLocalizationCommand extends CommandBase
   private Timer timer;
   private final double TRACK_LENGTH = 30;
   private final double TRACK_WIDTH  = 29.579;
+  private PigeonIMU pigeon;
   private double prevTime;
 
   public RobotLocalizationCommand(SwerveSubsystem swerveSubsystem)
@@ -19,6 +21,7 @@ public class RobotLocalizationCommand extends CommandBase
     this.swerveSubsystem = swerveSubsystem;
     addRequirements(swerveSubsystem);
     timer = new Timer();
+    pigeon = new PigeonIMU(20); // Device #: 20
     prevTime = 0;
     timer.start();
   }
@@ -31,6 +34,12 @@ public class RobotLocalizationCommand extends CommandBase
     return Math.sin(swerveSubsystem.modules[index].desiredSteeringAngle) * swerveSubsystem.modules[index].desiredWheelSpeed;
   }
 
+  public double[] yawPitchRoll() {
+    double[] yawPitchRolle = new double[3];
+    pigeon.getYawPitchRoll(yawPitchRolle);
+    return yawPitchRolle;
+  }
+
   @Override public void execute()
   {
     double A = (getModuleYVelocity(1) + getModuleYVelocity(0)) / 2;
@@ -41,9 +50,12 @@ public class RobotLocalizationCommand extends CommandBase
     double ROT  = ((B - A) / TRACK_LENGTH + (C - D) / TRACK_WIDTH) / 2; // Angular velocity of chassis
     double FWD = (ROT * (TRACK_LENGTH / 2) + A - ROT * (TRACK_LENGTH / 2) + B) / 2; // Chassis y-velocity
     double STR = (ROT * (TRACK_WIDTH / 2) + C - ROT * (TRACK_WIDTH / 2) + D) / 2; // Chassis x-velocity
+    
     // Field centric modifications:
-    // FWD = FWD * cos(theta) + STR * sin(theta)
-    // STR = STR * cos(theta) - FWD * sin(theta)
+    double theta = Math.toRadians(yawPitchRoll()[0]);
+    FWD = FWD * Math.cos(theta) + STR * Math.sin(theta);
+    STR = STR * Math.cos(theta) - FWD * Math.sin(theta);
+
     double deltaT = timer.get() - prevTime;
     double newX = Robot.currentPos.getX() + deltaT*STR;
     double newY = Robot.currentPos.getY() + deltaT*FWD;
