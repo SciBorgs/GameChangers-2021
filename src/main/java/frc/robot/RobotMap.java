@@ -2,6 +2,9 @@ package frc.robot;
 
 public final class RobotMap
 {
+
+  //*******************DRIVE TRAIN******************//
+
   public static final int[][] SWERVE_MODULE_LUT = {
     /* clang-format off */
 
@@ -14,9 +17,46 @@ public final class RobotMap
     /* clang-format on */
   };
 
-  public static final int INTAKE_FLYWHEEL_SPARK = 35;
-  public static final int INTAKE_LIFT_SPARK = 38;
-  public static final int INTAKE_LIFT_ENCODER = 34;
+  // *******************INTAKE******************//
 
-  public static final int XBOX_CONTROLLER = 0;
+  public static final int INTAKE_FLYWHEEL_SPARK = -1;
+  public static final int INTAKE_LIFT_SPARK = -1;
+
+  // *******************HOPPER******************//
+
+  public static final int HOPPER_SPARK = -1;
+
+  // *******************SHOOTER******************//
+
+    public static final int SHOOTER_LEFT_SPARK = -1;
+    public static final int SHOOTER_RIGHT_SPARK = -1;
+    public static final int HOOD_SPARK = -1;
+    public static final int HOOD_ENCODER = -1;
+    
+    // *****************XBOX*****************//
+
+    public static final int XBOX_CONTROLLER = 0;
+  
+    public static final int XBOX_A = -1;
+    public static final int XBOX_B = -1;
+    public static final int XBOX_X = -1;
+    public static final int XBOX_Y = -1;
+  
+    public static final int XBOX_BUMPER_LEFT  = -1;
+    public static final int XBOX_BUMPER_RIGHT = -1;
+  
+    public static final int XBOX_BACK  = -1;
+    public static final int XBOX_START = -1;
+  
+    public static final int XBOX_STICK_LEFT_BUTTON  = -1;
+    public static final int XBOX_STICK_RIGHT_BUTTON = -1;
+  
+    public static final int XBOX_TRIGGER_LEFT  = -1;
+    public static final int XBOX_TRIGGER_RIGHT = -1;
+  
+    public static final int XBOX_LEFT_JOY_X = 0;
+    public static final int XBOX_LEFT_JOY_Y = 1;
+  
+    public static final int XBOX_RIGHT_JOY_X = 2;
+    public static final int XBOX_RIGHT_JOY_Y = 3;
 }
