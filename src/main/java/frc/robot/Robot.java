@@ -1,22 +1,34 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import frc.robot.util.PID;
 import frc.robot.hardware.SciPigeon;
-import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.intake.ToggleFlywheelCommand;
+import frc.robot.commands.intake.ToggleIntakePositionCommand;
+import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class Robot extends TimedRobot
 {
   private SwerveSubsystem swerveSubsystem;
   private SwerveJoystickCommand swerveJoystickCommand;
+  private IntakeSubsystem intakeSubsystem;
+  private ToggleFlywheelCommand toggleFlywheelCommand;
+  private ToggleIntakePositionCommand toggleIntakePositionCommand;
+  private XboxController xboxController;
+  private JoystickButton toggleIntakeFlywheelButton, toggleIntakePositionButton;
+
+
   private NetworkTableInstance networkTables;
   private NetworkTable visionTable;
   final double STEERING_SPARK_GEAR_RATIO    = 1.0 / 60;
@@ -38,6 +50,17 @@ public class Robot extends TimedRobot
   {
     swerveSubsystem       = new SwerveSubsystem();
     swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
+    intakeSubsystem       = new IntakeSubsystem();
+    //toggleFlywheelCommand = new ToggleFlywheelCommand(intakeSubsystem);
+    //toggleIntakePositionCommand = new ToggleIntakePositionCommand(intakeSubsystem);
+
+    xboxController = new XboxController(RobotMap.XBOX_CONTROLLER);
+    toggleIntakeFlywheelButton = new JoystickButton(xboxController, XboxController.Button.kA.value);
+    toggleIntakeFlywheelButton.whenPressed(new ToggleFlywheelCommand(intakeSubsystem));
+    toggleIntakePositionButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+    toggleIntakePositionButton.whenPressed(new ToggleIntakePositionCommand(intakeSubsystem));
+
+
     //steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
     //shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
     //shooterSpark2 = new SciSpark(10, SHOOTER_SPARK_GEAR_RATIO);

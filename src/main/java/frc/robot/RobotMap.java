@@ -13,4 +13,10 @@ public final class RobotMap
 
     /* clang-format on */
   };
+
+  public static final int INTAKE_FLYWHEEL_SPARK = 35;
+  public static final int INTAKE_LIFT_SPARK = 38;
+  public static final int INTAKE_LIFT_ENCODER = 34;
+
+  public static final int XBOX_CONTROLLER = 0;
 }
