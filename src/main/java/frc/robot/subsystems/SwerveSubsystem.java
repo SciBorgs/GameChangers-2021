@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
@@ -21,7 +20,7 @@ public class SwerveSubsystem extends SubsystemBase
   private SciPigeon pigeon = new SciPigeon(20);
   private boolean useGyro = true;
 
-  private final double JOYSTICK_LIMITER = 2 / 5;
+  private final double JOYSTICK_LIMITER = 2.0 / 5;
   private static class Module
   {
     private SciSpark drivenSpark;
