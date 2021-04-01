@@ -22,15 +22,15 @@ public class SwerveSubsystem extends SubsystemBase
   private boolean useGyro = true;
 
   private final double JOYSTICK_LIMITER = 2 / 5;
-  private static class Module
+  public static class Module
   {
     private SciSpark drivenSpark;
     private SciSpark steeringSpark;
     private SciAbsoluteEncoder steeringEncoder;
     private PID steeringAnglePID;
 
-    private double desiredWheelSpeed;
-    private double desiredSteeringAngle;
+    public double desiredWheelSpeed;
+    public double desiredSteeringAngle;
 
     public Module(int drivenSparkPort,
                   int steeringSparkPort,
@@ -101,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase
     //System.out.println("rot: " + rot);
   }
 
-  private void drive(double latVel, double longVel, double omega)
+  public void drive(double latVel, double longVel, double omega)
   {
     // System.out.println(omega);
     //final double TRACK_LENGTH = 30;

@@ -9,16 +9,19 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.util.PID;
 import frc.robot.hardware.SciPigeon;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.RobotLocalizationCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.PID;
+import frc.robot.util.Point;
 
 public class Robot extends TimedRobot
 {
   private SwerveSubsystem swerveSubsystem;
   private SwerveJoystickCommand swerveJoystickCommand;
-  private NetworkTableInstance networkTables;
-  private NetworkTable visionTable;
+  private RobotLocalizationCommand robotLocalizationCommand;
+  public static Point currentPos;
   final double STEERING_SPARK_GEAR_RATIO    = 1.0 / 60;
   final double STEERING_ENCODER_GEAR_RATIO  = 1.0 / 5;
   final double INTAKE_FLYWHEEL_GEAR_RATIO   = 1.0 / 9;
@@ -36,8 +39,10 @@ public class Robot extends TimedRobot
 
   @Override public void robotInit()
   {
-    swerveSubsystem       = new SwerveSubsystem();
-    swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
+    currentPos = new Point(0.0,0.0);
+    swerveSubsystem          = new SwerveSubsystem();
+    swerveJoystickCommand    = new SwerveJoystickCommand(swerveSubsystem);
+    robotLocalizationCommand = new RobotLocalizationCommand(swerveSubsystem);
     //steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
     //shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
     //shooterSpark2 = new SciSpark(10, SHOOTER_SPARK_GEAR_RATIO);
@@ -79,6 +84,7 @@ public class Robot extends TimedRobot
   {
     //pigeon.setAngle(0);
     swerveJoystickCommand.schedule();
+    robotLocalizationCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 
@@ -98,6 +104,7 @@ public class Robot extends TimedRobot
     //shooterSpark2.set(.1);
     //System.out.println(intakeFlywheelSpark.getEncoder().getVelocity());
     //intakeFlywheelSpark.set(1);
+    System.out.println(currentPos);
   }
 
   @Override public void testInit() {}
