@@ -1,25 +1,33 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
 import frc.robot.RobotMap;
-// import frc.robot.hardware.SciAbsoluteEncoder;
-// import frc.robot.hardware.SciSpark;
+import frc.robot.hardware.SciAbsoluteEncoder;
+import frc.robot.hardware.SciSpark;
 import frc.robot.util.PID;
 import frc.robot.util.SciMath;
 import java.util.Arrays;
 import java.util.Comparator;
+import frc.robot.hardware.SciPigeon;
 
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
+  private XboxController xbox = new XboxController(0);
 
+  private SciPigeon pigeon = new SciPigeon(20);
+  private boolean useGyro = true;
+
+  private final double JOYSTICK_LIMITER = 2 / 5;
   private static class Module
   {
-    // private SciSpark drivenSpark;
-    // private SciSpark steeringSpark;
-    // private SciAbsoluteEncoder steeringEncoder;
-    // private PID steeringAnglePID;
+    private SciSpark drivenSpark;
+    private SciSpark steeringSpark;
+    private SciAbsoluteEncoder steeringEncoder;
+    private PID steeringAnglePID;
 
     private double desiredWheelSpeed;
     private double desiredSteeringAngle;
@@ -27,25 +35,29 @@ public class SwerveSubsystem extends SubsystemBase
     public Module(int drivenSparkPort,
                   int steeringSparkPort,
                   int steeringEncoderPort,
-                  boolean steeringEncoderFlipped)
+                  boolean flipSteeringEncoder)
     {
       final double DRIVEN_SPARK_GEAR_RATIO     = 3.0 / 40;
       final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
       final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
 
       /* clang-format off */
-      // drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
-      // steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
+      drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
+      steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
       
-      // steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
-      //                                          STEERING_ENCODER_GEAR_RATIO,
-      //                                          Math.toRadians(90),
-      //                                          steeringEncoderFlipped);
+      steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
+                                               STEERING_ENCODER_GEAR_RATIO,
+                                               Math.toRadians(0),
+                                               flipSteeringEncoder);
+      System.out.println("initial angle: " + Math.toDegrees(steeringEncoder.getAngle()));
+
+      steeringAnglePID = new PID(0.82, 0, 0);
+
       /* clang-format on */
     }
   }
 
-  private Module[] modules;
+  public Module[] modules;
 
   public SwerveSubsystem()
   {
@@ -57,45 +69,90 @@ public class SwerveSubsystem extends SubsystemBase
       int drivenSparkPort            = moduleRow[0];
       int steeringSparkPort          = moduleRow[1];
       int steeringEncoderPort        = moduleRow[2];
-      boolean steeringEncoderFlipped = moduleRow[3] == 1 ? true : false;
+      boolean flipSteeringEncoder = moduleRow[3] == 1 ? true : false;
 
       modules[i] = new Module(drivenSparkPort,
                               steeringSparkPort,
                               steeringEncoderPort,
-                              steeringEncoderFlipped);
+                              flipSteeringEncoder);
+      modules[i].drivenSpark.setInverted(true);
     }
+    if (useGyro) {
+      pigeon.setAngle(Math.toRadians(0));
+    } 
   }
 
   public void joystickDrive()
   {
-    drive(0.1, 0.1, 0);
+    double x   =  1 * Math.signum(xbox.getRawAxis(0)) * Math.pow(xbox.getRawAxis(0), 2);
+    double y   = -1 * Math.signum(xbox.getRawAxis(1)) * Math.pow(xbox.getRawAxis(1), 2);
+    double rot =  1 * Math.signum(xbox.getRawAxis(2)) * Math.pow(xbox.getRawAxis(2), 2);
+    if((xbox.getRawAxis(0) < .2) && (xbox.getRawAxis(0) > -.2) &&
+       (xbox.getRawAxis(1) < .2) && (xbox.getRawAxis(1) > -.2) &&
+       (xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
+      x = 0;
+      y = 0;
+      rot = 0;
+    } else if ((xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
+      rot = 0;
+    }
+   
+    drive(x, y, rot);
+    //System.out.println("rot: " + rot);
   }
 
   private void drive(double latVel, double longVel, double omega)
   {
-    final double HALF_TRACK_LENGTH = 30 / 2;
-    final double HALF_TRACK_WIDTH  = 29.579 / 2;
+    // System.out.println(omega);
+    //final double TRACK_LENGTH = 30;
+    //final double TRACK_WIDTH  = 29.579;
+    final double TRACK_LENGTH = 1;
+    final double TRACK_WIDTH = 1;
+
+    double diagonal = Math.sqrt(Math.pow(TRACK_LENGTH, 2) + 
+                                Math.pow(TRACK_WIDTH,2));
 
     final int BL_IDX = 0;
     final int BR_IDX = 1;
     final int FL_IDX = 2;
     final int FR_IDX = 3;
 
-    Pair<Double, Double> wheelLatV = new Pair<>(
-      latVel - omega * HALF_TRACK_LENGTH, latVel + omega * HALF_TRACK_LENGTH);
-    Pair<Double, Double> wheelLongV = new Pair<>(
-      longVel + omega * HALF_TRACK_WIDTH, longVel - omega * HALF_TRACK_WIDTH);
+    Pair<Double, Double> wheelLatVel  = new Pair<>(0.0, 0.0);
+    Pair<Double, Double> wheelLongVel = new Pair<>(0.0, 0.0);
+
+    if(useGyro) {
+      double gyroAngle = SciMath.normalizeAngle(pigeon.getAngle());
+      gyroAngle = SciMath.normalizeAngle(gyroAngle);
+      gyroAngle = SciMath.normalizeAngle(gyroAngle + Math.PI);
+      double latVelGyro  = latVel * Math.cos(gyroAngle) +  longVel * Math.sin(gyroAngle);
+      double longVelGyro = - latVel * Math.sin(gyroAngle) +  longVel * Math.cos(gyroAngle);
+      wheelLatVel = new Pair<>(
+        latVelGyro - (omega * TRACK_LENGTH / diagonal), latVelGyro + (omega * TRACK_LENGTH / diagonal));
+
+      wheelLongVel = new Pair<>(
+        longVelGyro + (omega * TRACK_WIDTH / diagonal), longVelGyro - (omega * TRACK_WIDTH / diagonal));
+        //System.out.println("gyroAngle: " + Math.toDegrees(gyroAngle));
+    } else {
+      wheelLatVel = new Pair<>(
+        latVel - (omega * TRACK_LENGTH / diagonal), latVel + (omega * TRACK_LENGTH / diagonal));
+        //System.out.println("latVel1: " + wheelLatVel.getFirst() + "\t latVel2: " + wheelLatVel.getSecond());
+
+      wheelLongVel = new Pair<>(
+        longVel + (omega * TRACK_WIDTH / diagonal), longVel - (omega * TRACK_WIDTH / diagonal));
+        //System.out.println("longVel1: " + wheelLongVel.getFirst() + "\t longVel2: " + wheelLongVel.getSecond());
+    }
 
     setDesiredModuleStrategy(
-      modules[BL_IDX], wheelLatV.getFirst(), wheelLongV.getFirst());
+      modules[BL_IDX], wheelLatVel.getFirst(), wheelLongVel.getFirst());
     setDesiredModuleStrategy(
-      modules[BR_IDX], wheelLatV.getFirst(), wheelLongV.getSecond());
+      modules[BR_IDX], wheelLatVel.getFirst(), wheelLongVel.getSecond());
     setDesiredModuleStrategy(
-      modules[FL_IDX], wheelLatV.getSecond(), wheelLongV.getFirst());
+      modules[FL_IDX], wheelLatVel.getSecond(), wheelLongVel.getFirst());
     setDesiredModuleStrategy(
-      modules[FR_IDX], wheelLatV.getSecond(), wheelLongV.getSecond());
+      modules[FR_IDX], wheelLatVel.getSecond(), wheelLongVel.getSecond());
 
     executeDesiredModuleStrategies();
+    System.out.println("gyroAngle: " + Math.toDegrees(SciMath.normalizeAngle(pigeon.getAngle())));
   }
 
   private void setDesiredModuleStrategy(Module mod,
@@ -103,8 +160,7 @@ public class SwerveSubsystem extends SubsystemBase
                                         double wheelLongVel)
   {
     mod.desiredWheelSpeed = Math.hypot(wheelLatVel, wheelLongVel);
-    mod.desiredSteeringAngle =
-      SciMath.normalizeAngle(Math.atan2(wheelLongVel, wheelLatVel));
+    mod.desiredSteeringAngle = SciMath.normalizeAngle(Math.atan2(wheelLongVel, wheelLatVel));
   }
 
   private void executeDesiredModuleStrategies()
@@ -121,13 +177,40 @@ public class SwerveSubsystem extends SubsystemBase
       if (maxDesWheelSpeed > 1) {
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
+    
+      // if (useGyro) {
+      //   mod.desiredSteeringAngle = SciMath.normalizeAngle(mod.desiredSteeringAngle + Math.PI);
+      // }
 
-      System.out.println("MODULE: " + i + " SPEED: " + mod.desiredWheelSpeed +
-                         " ANGLE: " + Math.toDegrees(mod.desiredSteeringAngle));
+      //System.out.println(this.getClass().getSimpleName() + ":"
+      //                   + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
+      //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
+      //                   " DEGREES");                  
 
-      // mod.drivenSpark.set(mod.desiredWheelSpeed);
-      // mod.steeringSpark.set(mod.steeringAnglePID.getOutput(
-      // mod.desiredSteeringAngle, mod.steeringEncoder.getAngle()));
+      // optimized angle code?
+
+      mod.drivenSpark.set(mod.desiredWheelSpeed);
+      
+      double difference_angle = mod.desiredSteeringAngle - mod.steeringEncoder.getAngle();
+      if (Math.abs(difference_angle) > Math.PI) {
+        double sign = Math.signum(difference_angle);
+        difference_angle -= sign * 2 * Math.PI; 
+      }
+
+      // difference angle is somewhere between -PI and PI
+      double output = mod.steeringAnglePID.getOutput(difference_angle, 0);
+      mod.steeringSpark.set(output);
+
+      // System.out.println("desSteeringAngle " + i + ": " + mod.desiredSteeringAngle);
+    }
+  }
+
+  public void setZero () {
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+      mod.drivenSpark.set(0);
+      mod.steeringSpark.set(0);
     }
   }
 }
+
