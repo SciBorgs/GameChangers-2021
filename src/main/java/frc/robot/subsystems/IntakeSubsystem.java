@@ -4,10 +4,8 @@ import com.revrobotics.CANEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
-import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.util.PID;
-import frc.robot.util.SciMath;
 
 public class IntakeSubsystem extends SubsystemBase {
 
