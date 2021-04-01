@@ -48,6 +48,6 @@ public class SciAbsoluteEncoder
   public double getAngle()
   {
     double angle = rawEncoder.getDistance() + offset;
-    return SciMath.normalizeAngle(flip ? Math.PI - angle : angle);
+    return SciMath.normalizeAngle(flip ? (2 * Math.PI - angle) : angle);
   }
 }

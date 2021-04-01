@@ -2,6 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
+import frc.robot.util.PID;
+import frc.robot.hardware.SciPigeon;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.RobotLocalizationCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
@@ -28,6 +34,8 @@ public class Robot extends TimedRobot
   private SciAbsoluteEncoder steeringEncoder;
 
   private PID steeringAnglePID;
+  
+  //private SciPigeon pigeon;
 
   @Override public void robotInit()
   {
@@ -48,9 +56,13 @@ public class Robot extends TimedRobot
 
     // steeringEncoder = new SciAbsoluteEncoder(3,
     //                                          STEERING_ENCODER_GEAR_RATIO,
-    //                                          Math.toRadians(90),
+    //                                          0,
     //                                          false);
     // steeringAnglePID = new PID(.82, 0.0, 0.0);
+    //pigeon = new SciPigeon(20);
+
+    //networkTables = NetworkTableInstance.getDefault();
+    //visionTable = networkTables.getTable("Vision");
   }
 
   @Override public void robotPeriodic()
@@ -70,16 +82,22 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit()
   {
-    swerveSubsystem.setZero();
+    //pigeon.setAngle(0);
     swerveJoystickCommand.schedule();
     robotLocalizationCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 
   {  
+    //System.out.println(visionTable.getEntry("Port Lateral Position").getDouble(-1));
+    //System.out.println(visionTable.getEntry("Port Longitudinal Position").getDouble(-1));
+    //System.out.println(visionTable.getEntry("Ball Lateral Position").getDouble(-1));
+    //System.out.println(visionTable.getEntry("Ball Longitudinal Position").getDouble(-1));
     //double output = steeringAnglePID.getOutput(Math.toRadians(270), steeringEncoder.getAngle());
     //steeringSpark1.set(output);
-    //System.out.println("getAngle(): " + Math.toDegrees(steeringEncoder.getAngle())+"\t output:" + output);
+    //System.out.println("getAngle(): " + Math.toDegrees(steeringEncoder.getAngle()));
+
+    //System.out.println("Pigeon Yaw Angle: " + Math.toDegrees(pigeon.getAngle()));
     
     //hopperSpark.set(.1);
     //shooterSpark1.set(.1);
