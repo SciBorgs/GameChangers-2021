@@ -1,21 +1,17 @@
 package frc.robot.commands.swerve;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Robot;
 
 public class SwerveJoystickCommand extends CommandBase
 {
-  private SwerveSubsystem swerveSubsystem;
-
-  public SwerveJoystickCommand(SwerveSubsystem swerveSubsystem)
+  public SwerveJoystickCommand()
   {
-    this.swerveSubsystem = swerveSubsystem;
-
-    addRequirements(swerveSubsystem);
+    addRequirements(Robot.swerveSubsystem);
   }
 
   @Override public void execute()
   {
-    swerveSubsystem.joystickDrive();
+    Robot.swerveSubsystem.joystickDrive(Robot.oi.getXboxLeftX(), Robot.oi.getXboxLeftY(), Robot.oi.getXboxRightX());
   }
 }
