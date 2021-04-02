@@ -12,20 +12,14 @@ public class Auto {
     }
 
     public void autoMovement(Waypoint goal) {
-        double xSetpoint = MaxMagnitude(xPID.getOutput(goal.getX(), Robot.localization.currentWaypoint.getX()), 1);
-        double ySetpoint = MaxMagnitude(yPID.getOutput(goal.getY(), Robot.localization.currentWaypoint.getY()), 1);
-        double headingSetpoint = MaxMagnitude(headingPID.getOutput(goal.getHeading(), Robot.localization.currentWaypoint.getHeading()), 1);
-        Robot.swerveSubsystem.drive(xSetpoint, ySetpoint, headingSetpoint);
-    }
-
-    public double MaxMagnitude(double input, double maxMagnitude) {
-        maxMagnitude = Math.abs(maxMagnitude);
-        if (input > maxMagnitude) {
-            return maxMagnitude;
-        } else if (input < -maxMagnitude) {
-            return -maxMagnitude;
-        } else {
-            return input;
+        double xSetpoint = xPID.getOutput(goal.getX(), Robot.localization.currentWaypoint.getX());
+        double ySetpoint = yPID.getOutput(goal.getY(), Robot.localization.currentWaypoint.getY());
+        double maxSetpoint = Math.max(Math.abs(xSetpoint), Math.abs(ySetpoint));
+        if (maxSetpoint > 1) {
+            xSetpoint /= maxSetpoint;
+            ySetpoint /= maxSetpoint;
         }
+        double headingSetpoint = headingPID.getOutput(goal.getHeading(), Robot.localization.currentWaypoint.getHeading());
+        Robot.swerveSubsystem.drive(xSetpoint, ySetpoint, headingSetpoint);
     }
 }
