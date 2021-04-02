@@ -9,7 +9,7 @@ public class Localization {
   private Timer timer;
   private final double TRACK_LENGTH = 30;
   private final double TRACK_WIDTH  = 29.579;
-  private final double WHEEL_RADIUS = 1.0;
+  private final double WHEEL_RADIUS = 2.0;
   private double prevTime;
 
   public Localization()
