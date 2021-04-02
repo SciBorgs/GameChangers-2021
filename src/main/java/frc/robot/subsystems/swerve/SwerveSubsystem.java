@@ -60,16 +60,12 @@ public class SwerveSubsystem extends SubsystemBase
     }
    
     drive(x, y, rot);
-    //System.out.println("rot: " + rot);
   }
 
   public void drive(double latVel, double longVel, double omega)
   {
-    // System.out.println(omega);
-    //final double TRACK_LENGTH = 30;
-    //final double TRACK_WIDTH  = 29.579;
-    final double TRACK_LENGTH = 1;
-    final double TRACK_WIDTH = 1;
+    final double TRACK_LENGTH = 30;
+    final double TRACK_WIDTH  = 29.579;
 
     double diagonal = Math.sqrt(Math.pow(TRACK_LENGTH, 2) + 
                                 Math.pow(TRACK_WIDTH,2));
@@ -93,15 +89,12 @@ public class SwerveSubsystem extends SubsystemBase
 
       wheelLongVel = new Pair<>(
         longVelGyro + (omega * TRACK_WIDTH / diagonal), longVelGyro - (omega * TRACK_WIDTH / diagonal));
-        //System.out.println("gyroAngle: " + Math.toDegrees(gyroAngle));
     } else {
       wheelLatVel = new Pair<>(
         latVel - (omega * TRACK_LENGTH / diagonal), latVel + (omega * TRACK_LENGTH / diagonal));
-        //System.out.println("latVel1: " + wheelLatVel.getFirst() + "\t latVel2: " + wheelLatVel.getSecond());
 
       wheelLongVel = new Pair<>(
         longVel + (omega * TRACK_WIDTH / diagonal), longVel - (omega * TRACK_WIDTH / diagonal));
-        //System.out.println("longVel1: " + wheelLongVel.getFirst() + "\t longVel2: " + wheelLongVel.getSecond());
     }
 
     setDesiredModuleStrategy(
@@ -140,30 +133,26 @@ public class SwerveSubsystem extends SubsystemBase
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
     
-      // if (useGyro) {
-      //   mod.desiredSteeringAngle = SciMath.normalizeAngle(mod.desiredSteeringAngle + Math.PI);
-      // }
+      if (useGyro) {
+        mod.desiredSteeringAngle = SciMath.normalizeAngle(mod.desiredSteeringAngle + Math.PI);
+      }
 
       //System.out.println(this.getClass().getSimpleName() + ":"
       //                   + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
       //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
       //                   " DEGREES");                  
 
-      // optimized angle code?
-
       mod.drivenSpark.set(mod.desiredWheelSpeed);
-      
+
+      // optimize angle    
       double difference_angle = mod.desiredSteeringAngle - mod.steeringEncoder.getAngle();
       if (Math.abs(difference_angle) > Math.PI) {
         double sign = Math.signum(difference_angle);
         difference_angle -= sign * 2 * Math.PI; 
       }
 
-      // difference angle is somewhere between -PI and PI
       double output = mod.steeringAnglePID.getOutput(difference_angle, 0);
       mod.steeringSpark.set(output);
-
-      // System.out.println("desSteeringAngle " + i + ": " + mod.desiredSteeringAngle);
     }
   }
 

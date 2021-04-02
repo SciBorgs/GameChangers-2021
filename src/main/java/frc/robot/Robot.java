@@ -14,13 +14,12 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
 import frc.robot.util.Point;
 import frc.robot.util.Localization;
+import frc.robot.util.DelayedPrinter;
 
 public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-
-public static Localization localization = new Localization();
 
   public static OI oi = new OI();
   
@@ -46,6 +45,7 @@ public static Localization localization = new Localization();
 
   @Override public void robotInit()
   {
+    Localization.start();
     //toggleFlywheelCommand = new ToggleFlywheelCommand(intakeSubsystem);
     //toggleIntakePositionCommand = new ToggleIntakePositionCommand(intakeSubsystem);
 
@@ -75,14 +75,13 @@ public static Localization localization = new Localization();
   @Override public void robotPeriodic()
   {
     CommandScheduler.getInstance().run();
-    localization.update();
-    System.out.println(Localization.currentPos);
+    Localization.update();
+    DelayedPrinter.print(Localization.currentPos.toString(), 25);
   }
 
   @Override public void disabledInit() {}
 
-  @Override public void disabledPeriodic() {
-  }
+  @Override public void disabledPeriodic() {}
 
   @Override public void autonomousInit() {}
 
@@ -92,7 +91,7 @@ public static Localization localization = new Localization();
 
   @Override public void teleopInit()
   {
-    //swerveJoystickCommand.schedule();
+    swerveJoystickCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 
