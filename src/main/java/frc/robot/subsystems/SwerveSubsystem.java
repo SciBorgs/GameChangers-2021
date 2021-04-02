@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
 import frc.robot.RobotMap;
@@ -16,13 +14,12 @@ import frc.robot.hardware.SciPigeon;
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
-  private XboxController xbox = new XboxController(0);
 
   public SciPigeon pigeon = new SciPigeon(20);
   private boolean useGyro = true;
 
-  private final double JOYSTICK_LIMITER = 2 / 5;
-  public static class Module
+  private final double JOYSTICK_LIMITER = 2.0 / 5;
+  private static class Module
   {
     public SciSpark drivenSpark;
     private SciSpark steeringSpark;
@@ -82,18 +79,18 @@ public class SwerveSubsystem extends SubsystemBase
     } 
   }
 
-  public void joystickDrive()
+  public void joystickDrive(double rawX, double rawY, double rawRot)
   {
-    double x   =  1 * Math.signum(xbox.getRawAxis(0)) * Math.pow(xbox.getRawAxis(0), 2);
-    double y   = -1 * Math.signum(xbox.getRawAxis(1)) * Math.pow(xbox.getRawAxis(1), 2);
-    double rot =  1 * Math.signum(xbox.getRawAxis(2)) * Math.pow(xbox.getRawAxis(2), 2);
-    if((xbox.getRawAxis(0) < .2) && (xbox.getRawAxis(0) > -.2) &&
-       (xbox.getRawAxis(1) < .2) && (xbox.getRawAxis(1) > -.2) &&
-       (xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
+    double x   =  1 * Math.signum(rawX) * Math.pow(rawX, 2);
+    double y   = -1 * Math.signum(rawY) * Math.pow(rawY, 2);
+    double rot =  1 * Math.signum(rawRot) * Math.pow(rawRot, 2);
+    if((rawX < .2) && (rawX > -.2) &&
+       (rawY < .2) && (rawY > -.2) &&
+       (rawRot < .2) && (rawRot > -.2)){
       x = 0;
       y = 0;
       rot = 0;
-    } else if ((xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
+    } else if ((rawRot < .2) && (rawRot > -.2)){
       rot = 0;
     }
    

@@ -3,14 +3,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import frc.robot.util.PID;
-import frc.robot.hardware.SciPigeon;
-import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.PID;
 import frc.robot.util.Point;
@@ -18,9 +17,15 @@ import frc.robot.util.Localization;
 
 public class Robot extends TimedRobot
 {
-  private SwerveSubsystem swerveSubsystem;
-  private SwerveJoystickCommand swerveJoystickCommand;
-  private Localization localization;
+  public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
+  public static OI oi = new OI();
+  public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
+
+
+  public static NetworkTableInstance networkTables;
+  public static NetworkTable visionTable;
   final double STEERING_SPARK_GEAR_RATIO    = 1.0 / 60;
   final double STEERING_ENCODER_GEAR_RATIO  = 1.0 / 5;
   final double INTAKE_FLYWHEEL_GEAR_RATIO   = 1.0 / 9;
@@ -39,9 +44,10 @@ public class Robot extends TimedRobot
 
   @Override public void robotInit()
   {
-    swerveSubsystem          = new SwerveSubsystem();
-    swerveJoystickCommand    = new SwerveJoystickCommand(swerveSubsystem);
-    localization             = new Localization(swerveSubsystem);
+    //toggleFlywheelCommand = new ToggleFlywheelCommand(intakeSubsystem);
+    //toggleIntakePositionCommand = new ToggleIntakePositionCommand(intakeSubsystem);
+
+
     //steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
     //shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
     //shooterSpark2 = new SciSpark(10, SHOOTER_SPARK_GEAR_RATIO);
@@ -74,17 +80,17 @@ public class Robot extends TimedRobot
   @Override public void disabledInit() {}
 
   @Override public void disabledPeriodic() {
-    //System.out.println(Math.toDegrees(steeringEncoder.getAngle()));
   }
 
   @Override public void autonomousInit() {}
 
-  @Override public void autonomousPeriodic() {}
+  @Override public void autonomousPeriodic() {
+    //System.out.println(Robot.intakeSubsystem.liftEncoder.getPosition());
+  }
 
   @Override public void teleopInit()
   {
-    //pigeon.setAngle(0);
-    swerveJoystickCommand.schedule();
+    //swerveJoystickCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 
