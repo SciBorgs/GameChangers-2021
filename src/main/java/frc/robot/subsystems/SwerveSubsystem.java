@@ -24,7 +24,7 @@ public class SwerveSubsystem extends SubsystemBase
   private final double JOYSTICK_LIMITER = 2 / 5;
   public static class Module
   {
-    private SciSpark drivenSpark;
+    public SciSpark drivenSpark;
     private SciSpark steeringSpark;
     private SciAbsoluteEncoder steeringEncoder;
     private PID steeringAnglePID;
