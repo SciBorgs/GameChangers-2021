@@ -18,7 +18,7 @@ public class SwerveSubsystem extends SubsystemBase
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
   private XboxController xbox = new XboxController(0);
 
-  private SciPigeon pigeon = new SciPigeon(20);
+  public SciPigeon pigeon = new SciPigeon(20);
   private boolean useGyro = true;
 
   private final double JOYSTICK_LIMITER = 2 / 5;

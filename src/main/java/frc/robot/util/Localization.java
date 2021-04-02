@@ -55,7 +55,7 @@ public class Localization {
     double STR =  coeff * (ROT * (TRACK_WIDTH / 2) + C - ROT * (TRACK_WIDTH / 2) + D) / 2; // Chassis x-velocity
     
     // Field centric modifications:
-    double theta = Math.toRadians(yawPitchRoll()[0]);
+    double theta = swerveSubsystem.pigeon.getAngle();
     FWD = FWD * Math.cos(theta) - STR * Math.sin(theta);
     STR = FWD * Math.sin(theta) + STR * Math.cos(theta);
 
