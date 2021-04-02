@@ -6,13 +6,11 @@ import frc.robot.Robot;
 public class ToggleFlywheelCommand extends CommandBase {
     public ToggleFlywheelCommand()
     {
-        System.out.println("Toggle Flywheel Command Constructor");
         addRequirements(Robot.intakeSubsystem);
     }
 
     @Override public void execute()
     {
-        System.out.println("Toggle Flywheel Command Execute");
         Robot.intakeSubsystem.toggleFlywheel();
     }
 

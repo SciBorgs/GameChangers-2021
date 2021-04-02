@@ -6,20 +6,24 @@ import frc.robot.Robot;
 
 public class ToggleIntakePositionCommand extends CommandBase {
     private Timer timer;
+
+    /* kinda jank
+     * the intake starts at the upright position and
+     * when this command runs the motor runs for .1 sec
+     * which jerks the intake and it falls flat
+     */
+    
     public ToggleIntakePositionCommand() {
-        System.out.println("Toggle Position Command Constructor");
         addRequirements(Robot.intakeSubsystem);
         timer = new Timer();
     }
 
     @Override
     public void initialize() {
-        //Robot.intakeSubsystem.toggleIntakePosition();
         timer.start();
     }
 
     @Override public void execute() {
-        System.out.println("Toggle Position Command Execute");
         Robot.intakeSubsystem.liftSpark.set(0.3);
     }
 
