@@ -10,7 +10,7 @@ import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
 import frc.robot.util.Point;
 import frc.robot.util.Localization;
@@ -20,9 +20,11 @@ public class Robot extends TimedRobot
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
-  public static OI oi = new OI();
-  public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
+public static Localization localization = new Localization();
 
+  public static OI oi = new OI();
+  
+  public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
 
   public static NetworkTableInstance networkTables;
   public static NetworkTable visionTable;

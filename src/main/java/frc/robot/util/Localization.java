@@ -1,45 +1,33 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj.Timer;
-import com.ctre.phoenix.sensors.PigeonIMU;
-import java.lang.Math;
+
+import frc.robot.Robot;
 
 public class Localization {
   public static Point currentPos;
-  private SwerveSubsystem swerveSubsystem;
   private Timer timer;
   private final double TRACK_LENGTH = 30;
   private final double TRACK_WIDTH  = 29.579;
   private final double WHEEL_RADIUS = 1.0;
-  private PigeonIMU pigeon;
   private double prevTime;
 
-  public Localization(SwerveSubsystem swerveSubsystem)
+  public Localization()
   {
-    this.swerveSubsystem = swerveSubsystem;
     currentPos = new Point(0.0,0.0);
     timer = new Timer();
-    pigeon = new PigeonIMU(20); // Device #: 20
     prevTime = 0;
     timer.start();
   }
 
   public double getModuleXVelocity(int index) {
-    double speed = 2 * Math.PI * swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
-    return Math.cos(swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity()) * speed;
+    double speed = 2 * Math.PI * Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
+    return Math.cos(Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity()) * speed;
   }
 
   public double getModuleYVelocity(int index) {
-    double speed = 2 * Math.PI * swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
-    return Math.sin(swerveSubsystem.modules[index].desiredSteeringAngle) * speed;
-  }
-
-  public double[] yawPitchRoll() {
-    double[] yawPitchRolle = new double[3];
-    pigeon.getYawPitchRoll(yawPitchRolle);
-    return yawPitchRolle;
+    double speed = 2 * Math.PI * Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
+    return Math.sin(Robot.swerveSubsystem.modules[index].desiredSteeringAngle) * speed;
   }
 
   public void update()
@@ -55,7 +43,7 @@ public class Localization {
     double STR =  coeff * (ROT * (TRACK_WIDTH / 2) + C - ROT * (TRACK_WIDTH / 2) + D) / 2; // Chassis x-velocity
     
     // Field centric modifications:
-    double theta = swerveSubsystem.pigeon.getAngle();
+    double theta = Robot.swerveSubsystem.pigeon.getAngle();
     FWD = FWD * Math.cos(theta) - STR * Math.sin(theta);
     STR = FWD * Math.sin(theta) + STR * Math.cos(theta);
 

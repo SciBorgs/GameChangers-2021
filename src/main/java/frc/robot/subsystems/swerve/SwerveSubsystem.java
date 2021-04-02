@@ -1,15 +1,14 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
+
 import frc.robot.RobotMap;
-import frc.robot.hardware.SciAbsoluteEncoder;
-import frc.robot.hardware.SciSpark;
-import frc.robot.util.PID;
+import frc.robot.hardware.SciPigeon;
 import frc.robot.util.SciMath;
+
 import java.util.Arrays;
 import java.util.Comparator;
-import frc.robot.hardware.SciPigeon;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -19,41 +18,7 @@ public class SwerveSubsystem extends SubsystemBase
   private boolean useGyro = true;
 
   private final double JOYSTICK_LIMITER = 2.0 / 5;
-  private static class Module
-  {
-    public SciSpark drivenSpark;
-    private SciSpark steeringSpark;
-    private SciAbsoluteEncoder steeringEncoder;
-    private PID steeringAnglePID;
-
-    public double desiredWheelSpeed;
-    public double desiredSteeringAngle;
-
-    public Module(int drivenSparkPort,
-                  int steeringSparkPort,
-                  int steeringEncoderPort,
-                  boolean flipSteeringEncoder)
-    {
-      final double DRIVEN_SPARK_GEAR_RATIO     = 3.0 / 40;
-      final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
-      final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
-
-      /* clang-format off */
-      drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
-      steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
-      
-      steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
-                                               STEERING_ENCODER_GEAR_RATIO,
-                                               Math.toRadians(0),
-                                               flipSteeringEncoder);
-      System.out.println("initial angle: " + Math.toDegrees(steeringEncoder.getAngle()));
-
-      steeringAnglePID = new PID(0.82, 0, 0);
-
-      /* clang-format on */
-    }
-  }
-
+  
   public Module[] modules;
 
   public SwerveSubsystem()
