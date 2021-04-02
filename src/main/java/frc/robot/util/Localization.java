@@ -10,6 +10,8 @@ import frc.robot.Robot;
 
 public class Localization {
   public static Point currentPos = new Point(0.0,0.0);
+  public static Waypoint currentWaypoint;
+
   private static Timer timer;
   private static final double TRACK_LENGTH = 30;
   private static final double TRACK_WIDTH  = 29.579;
@@ -19,6 +21,15 @@ public class Localization {
   private static double getModuleSpeed(int index) {
     double speed = Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
     return speed;
+  }
+  
+  public Localization()
+  {
+    currentPos = new Point(0.0,0.0);
+    currentWaypoint = new Waypoint(currentPos, 0.0);
+    timer = new Timer();
+    prevTime = 0;
+    timer.start();
   }
 
   private static double getModuleAngle(int index) {
@@ -74,9 +85,12 @@ public class Localization {
     double deltaT = timer.get() - prevTime;
     double newX = currentPos.getX() + deltaT*STR;
     double newY = currentPos.getY() + deltaT*FWD;
+    double newHeading = currentWaypoint.getHeading() + deltaT * ROT;
     currentPos.setX(newX);
     currentPos.setY(newY);
     prevTime = timer.get();
+    currentWaypoint.setPoint(currentPos);
+    currentWaypoint.setHeading(newHeading);
   }
 }
 

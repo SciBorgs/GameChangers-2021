@@ -13,6 +13,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
 import frc.robot.util.Point;
+import frc.robot.util.Auto;
 import frc.robot.util.Localization;
 import frc.robot.util.DelayedPrinter;
 
@@ -20,6 +21,9 @@ public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+
+  public static Localization localization = new Localization();
+  public static Auto auto = new Auto();
 
   public static OI oi = new OI();
   
@@ -86,7 +90,8 @@ public class Robot extends TimedRobot
   @Override public void autonomousInit() {}
 
   @Override public void autonomousPeriodic() {
-    //System.out.println(Robot.intakeSubsystem.liftEncoder.getPosition());
+    //System.out.println(Robot.intakeSubsystem.liftEncoder.getPosition());]
+
   }
 
   @Override public void teleopInit()
