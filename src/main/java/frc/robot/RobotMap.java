@@ -19,8 +19,8 @@ public final class RobotMap
 
   // *******************INTAKE******************//
 
-  public static final int INTAKE_FLYWHEEL_SPARK = -1;
-  public static final int INTAKE_LIFT_SPARK = -1;
+  public static final int INTAKE_FLYWHEEL_SPARK = 16;
+  public static final int INTAKE_LIFT_SPARK = 11;
 
   // *******************HOPPER******************//
 
@@ -37,10 +37,10 @@ public final class RobotMap
 
     public static final int XBOX_CONTROLLER = 0;
   
-    public static final int XBOX_A = -1;
-    public static final int XBOX_B = -1;
-    public static final int XBOX_X = -1;
-    public static final int XBOX_Y = -1;
+    public static final int XBOX_A = 2;
+    public static final int XBOX_B = 3;
+    public static final int XBOX_X = 1;
+    public static final int XBOX_Y = 4;
   
     public static final int XBOX_BUMPER_LEFT  = -1;
     public static final int XBOX_BUMPER_RIGHT = -1;

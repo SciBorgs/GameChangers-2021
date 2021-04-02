@@ -74,17 +74,17 @@ public class Robot extends TimedRobot
   @Override public void disabledInit() {}
 
   @Override public void disabledPeriodic() {
-    //System.out.println(Math.toDegrees(steeringEncoder.getAngle()));
   }
 
   @Override public void autonomousInit() {}
 
-  @Override public void autonomousPeriodic() {}
+  @Override public void autonomousPeriodic() {
+    //System.out.println(Robot.intakeSubsystem.liftEncoder.getPosition());
+  }
 
   @Override public void teleopInit()
   {
-    //pigeon.setAngle(0);
-    swerveJoystickCommand.schedule();
+    //swerveJoystickCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 
