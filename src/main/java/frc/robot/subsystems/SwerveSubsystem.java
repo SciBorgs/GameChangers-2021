@@ -196,14 +196,18 @@ public class SwerveSubsystem extends SubsystemBase
   }
 
   public boolean areModulesReset() {
-    boolean done = true;
+    boolean reset = true;
     for (int i = 0; i < MODULE_COUNT; ++i) {
       Module mod = modules[i];
-      if (Math.toDegrees(mod.steeringEncoder.getAngle()) > 10) {
-        return !done;
+      System.out.println(mod.steeringEncoder.getAngle());
+      if(Math.toDegrees(mod.steeringEncoder.getAngle()) < 185 && 
+        (Math.toDegrees(mod.steeringEncoder.getAngle()) > 175)) {
+        System.out.print(reset);
+      } else {
+        return !reset;
       }
     }
-    return done;
+    return reset;
   }
 
   public void setZero () {

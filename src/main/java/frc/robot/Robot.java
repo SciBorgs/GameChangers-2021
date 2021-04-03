@@ -18,7 +18,7 @@ public class Robot extends TimedRobot
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   public static OI oi = new OI();
-  public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
+  //public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
 
   public static NetworkTableInstance networkTables;
   public static NetworkTable visionTable;
@@ -85,7 +85,7 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit()
   {
-    swerveJoystickCommand.schedule();
+    (new SwerveJoystickCommand()).schedule();
   }
 
   @Override public void teleopPeriodic() 
