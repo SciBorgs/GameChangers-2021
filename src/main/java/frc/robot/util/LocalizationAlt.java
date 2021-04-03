@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.Robot;
 
-public class LocalizationBroken {
+public class LocalizationAlt {
   public static Point currentPos = new Point(0.0,0.0);
   private static Timer timer;
   private static final double TRACK_LENGTH = 30;
@@ -13,15 +13,17 @@ public class LocalizationBroken {
   private static double prevTime;
 
   private static double getModuleXVelocity(int index) {
+    double angle = Robot.swerveSubsystem.modules[index].steeringEncoder.getAngle();
     double speed = Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
     //double speed = Robot.swerveSubsystem.modules[index].desiredWheelSpeed;
-    return Math.cos(Robot.swerveSubsystem.modules[index].steeringEncoder.getAngle()) * speed;
+    return Math.cos(angle) * speed;
   }
 
   private static double getModuleYVelocity(int index) {
+    double angle = Robot.swerveSubsystem.modules[index].steeringEncoder.getAngle();
     double speed = Robot.swerveSubsystem.modules[index].drivenSpark.getEncoder().getVelocity() * WHEEL_RADIUS; 
     //double speed = Robot.swerveSubsystem.modules[index].desiredWheelSpeed;
-    return Math.sin(Robot.swerveSubsystem.modules[index].steeringEncoder.getAngle()) * speed;
+    return Math.sin(angle) * speed;
   }
 
   public static void start() {
