@@ -86,7 +86,7 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit()
   {
-    (new SwerveJoystickCommand()).schedule();
+    //(new SwerveJoystickCommand()).schedule();
   }
 
   @Override public void teleopPeriodic() 

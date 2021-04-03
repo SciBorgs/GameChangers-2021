@@ -7,6 +7,7 @@ public class ToggleHopperCommand extends CommandBase {
 
     @Override public void execute() {
         Robot.hopperSubsystem.toggleHopper();
+        System.out.println("hopper");
     }
 
     @Override public boolean isFinished() {

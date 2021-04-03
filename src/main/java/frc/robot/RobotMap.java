@@ -24,7 +24,7 @@ public final class RobotMap
 
   // *******************HOPPER******************//
 
-  public static final int HOPPER_SPARK = -1;
+  public static final int HOPPER_SPARK = 9;
 
   // *******************SHOOTER******************//
 

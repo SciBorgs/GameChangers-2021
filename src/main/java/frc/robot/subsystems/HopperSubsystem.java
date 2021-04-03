@@ -7,11 +7,12 @@ import frc.robot.RobotMap;
 public class HopperSubsystem extends SubsystemBase{
     
     public SciSpark hopperSpark;
-    private static final double MAX_SPEED = .3; // Change this value
+    private static final double MAX_SPEED = .5; // Change this value
     private boolean isMaxSpeed;
 
     public HopperSubsystem() {
         this.hopperSpark = new SciSpark(RobotMap.HOPPER_SPARK);
+        this.hopperSpark.setInverted(true);
         this.isMaxSpeed = false;
     }
 
