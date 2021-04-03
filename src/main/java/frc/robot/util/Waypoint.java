@@ -1,6 +1,6 @@
 package frc.robot.util;
 
-class Waypoint {
+public class Waypoint {
     private double x, y, heading;
 
     public Waypoint(Point point) {

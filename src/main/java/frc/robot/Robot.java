@@ -5,25 +5,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-import frc.robot.util.PID;
 import frc.robot.commands.swerve.SwerveJoystickCommand;
+
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
+
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.util.PID;
-import frc.robot.util.Point;
-import frc.robot.util.Auto;
-import frc.robot.util.Localization;
-import frc.robot.util.DelayedPrinter;
+
+import frc.robot.util.*;
 
 public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-
-  public static Localization localization = new Localization();
-  public static Auto auto = new Auto();
 
   public static OI oi = new OI();
   
@@ -31,6 +26,7 @@ public class Robot extends TimedRobot
 
   public static NetworkTableInstance networkTables;
   public static NetworkTable visionTable;
+
   final double STEERING_SPARK_GEAR_RATIO    = 1.0 / 60;
   final double STEERING_ENCODER_GEAR_RATIO  = 1.0 / 5;
   final double INTAKE_FLYWHEEL_GEAR_RATIO   = 1.0 / 9;
@@ -44,6 +40,7 @@ public class Robot extends TimedRobot
 
   private PID steeringAnglePID;
 
+  private Waypoint currDestination = new Waypoint (new Point(72.0, 0.0), 0.0);
   
   //private SciPigeon pigeon;
 
@@ -87,7 +84,10 @@ public class Robot extends TimedRobot
 
   @Override public void disabledPeriodic() {}
 
-  @Override public void autonomousInit() {}
+  @Override public void autonomousInit() {
+    Auto.start();
+    Auto.setCurrWaypoint(currDestination);
+  }
 
   @Override public void autonomousPeriodic() {
     //System.out.println(Robot.intakeSubsystem.liftEncoder.getPosition());]
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot
 
   @Override public void teleopInit()
   {
-    swerveJoystickCommand.schedule();
+    //swerveJoystickCommand.schedule();
   }
 
   @Override public void teleopPeriodic() 

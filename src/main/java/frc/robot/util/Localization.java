@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import frc.robot.Robot;
 
 public class Localization {
-  public static Point currentPos = new Point(0.0,0.0);
-  public static Waypoint currentWaypoint;
+  public static Point currentPos = new Point(0.0, 0.0);
+  public static Waypoint currentWaypoint = new Waypoint(currentPos, 0.0);
 
   private static Timer timer;
   private static final double TRACK_LENGTH = 30;
@@ -23,15 +23,6 @@ public class Localization {
     return speed;
   }
   
-  public Localization()
-  {
-    currentPos = new Point(0.0,0.0);
-    currentWaypoint = new Waypoint(currentPos, 0.0);
-    timer = new Timer();
-    prevTime = 0;
-    timer.start();
-  }
-
   private static double getModuleAngle(int index) {
     double angle = Robot.swerveSubsystem.modules[index].steeringEncoder.getAngle();
     return angle;
@@ -41,7 +32,9 @@ public class Localization {
     timer = new Timer();
     prevTime = 0;
     timer.start();
+    currentWaypoint.setHeading(Robot.swerveSubsystem.pigeon.getAngle());
   }
+  
 
   public static void update()
   {
