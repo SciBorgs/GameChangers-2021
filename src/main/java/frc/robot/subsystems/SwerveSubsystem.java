@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
 import frc.robot.RobotMap;
@@ -15,7 +14,6 @@ import frc.robot.hardware.SciPigeon;
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
-  private XboxController xbox = new XboxController(0);
 
   private SciPigeon pigeon = new SciPigeon(20);
   private boolean useGyro = true;
@@ -81,33 +79,28 @@ public class SwerveSubsystem extends SubsystemBase
     } 
   }
 
-  public void joystickDrive()
+  public void joystickDrive(double rawX, double rawY, double rawRot)
   {
-    double x   =  1 * Math.signum(xbox.getRawAxis(0)) * Math.pow(xbox.getRawAxis(0), 2);
-    double y   = -1 * Math.signum(xbox.getRawAxis(1)) * Math.pow(xbox.getRawAxis(1), 2);
-    double rot =  1 * Math.signum(xbox.getRawAxis(2)) * Math.pow(xbox.getRawAxis(2), 2);
-    if((xbox.getRawAxis(0) < .2) && (xbox.getRawAxis(0) > -.2) &&
-       (xbox.getRawAxis(1) < .2) && (xbox.getRawAxis(1) > -.2) &&
-       (xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
-      x = 0;
-      y = 0;
-      rot = 0;
-    } else if ((xbox.getRawAxis(2) < .2) && (xbox.getRawAxis(2) > -.2)){
+    double x   =  1 * Math.signum(rawX) * Math.pow(rawX, 2);
+    double y   = -1 * Math.signum(rawY) * Math.pow(rawY, 2);
+    double rot =  1 * Math.signum(rawRot) * Math.pow(rawRot, 2);
+    if((rawX < .2) && (rawX > -.2) &&
+       (rawY < .2) && (rawY > -.2) &&
+       (rawRot < .2) && (rawRot > -.2)){
+      setZero();
+      return;
+    } else if ((rawRot < .2) && (rawRot > -.2)){
       rot = 0;
     }
    
     drive(x, y, rot);
-    //System.out.println("rot: " + rot);
   }
 
   private void drive(double latVel, double longVel, double omega)
   {
-    // System.out.println(omega);
-    //final double TRACK_LENGTH = 30;
-    //final double TRACK_WIDTH  = 29.579;
-    final double TRACK_LENGTH = 1;
-    final double TRACK_WIDTH = 1;
-
+    final double TRACK_LENGTH = 30;
+    final double TRACK_WIDTH  = 29.579;
+    
     double diagonal = Math.sqrt(Math.pow(TRACK_LENGTH, 2) + 
                                 Math.pow(TRACK_WIDTH,2));
 
@@ -130,15 +123,13 @@ public class SwerveSubsystem extends SubsystemBase
 
       wheelLongVel = new Pair<>(
         longVelGyro + (omega * TRACK_WIDTH / diagonal), longVelGyro - (omega * TRACK_WIDTH / diagonal));
-        //System.out.println("gyroAngle: " + Math.toDegrees(gyroAngle));
+
     } else {
       wheelLatVel = new Pair<>(
         latVel - (omega * TRACK_LENGTH / diagonal), latVel + (omega * TRACK_LENGTH / diagonal));
-        //System.out.println("latVel1: " + wheelLatVel.getFirst() + "\t latVel2: " + wheelLatVel.getSecond());
 
       wheelLongVel = new Pair<>(
         longVel + (omega * TRACK_WIDTH / diagonal), longVel - (omega * TRACK_WIDTH / diagonal));
-        //System.out.println("longVel1: " + wheelLongVel.getFirst() + "\t longVel2: " + wheelLongVel.getSecond());
     }
 
     setDesiredModuleStrategy(
@@ -151,7 +142,6 @@ public class SwerveSubsystem extends SubsystemBase
       modules[FR_IDX], wheelLatVel.getSecond(), wheelLongVel.getSecond());
 
     executeDesiredModuleStrategies();
-    System.out.println("gyroAngle: " + Math.toDegrees(SciMath.normalizeAngle(pigeon.getAngle())));
   }
 
   private void setDesiredModuleStrategy(Module mod,
@@ -177,16 +167,16 @@ public class SwerveSubsystem extends SubsystemBase
         mod.desiredWheelSpeed /= maxDesWheelSpeed;
       }
     
-      // if (useGyro) {
-      //   mod.desiredSteeringAngle = SciMath.normalizeAngle(mod.desiredSteeringAngle + Math.PI);
-      // }
+      if (useGyro) {
+        mod.desiredSteeringAngle = SciMath.normalizeAngle(mod.desiredSteeringAngle + Math.PI);
+      }
 
       //System.out.println(this.getClass().getSimpleName() + ":"
       //                   + " SETTING " + i + " TO " + mod.desiredWheelSpeed +
       //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
       //                   " DEGREES");                  
 
-      // optimized angle code?
+      // optimize angle code
 
       mod.drivenSpark.set(mod.desiredWheelSpeed);
       
@@ -196,12 +186,28 @@ public class SwerveSubsystem extends SubsystemBase
         difference_angle -= sign * 2 * Math.PI; 
       }
 
-      // difference angle is somewhere between -PI and PI
       double output = mod.steeringAnglePID.getOutput(difference_angle, 0);
       mod.steeringSpark.set(output);
-
-      // System.out.println("desSteeringAngle " + i + ": " + mod.desiredSteeringAngle);
     }
+  }
+
+  public void resetModulePosition() {
+    drive(0,0,0);
+  }
+
+  public boolean areModulesReset() {
+    boolean reset = true;
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+      System.out.println(mod.steeringEncoder.getAngle());
+      if(Math.toDegrees(mod.steeringEncoder.getAngle()) < 185 && 
+        (Math.toDegrees(mod.steeringEncoder.getAngle()) > 175)) {
+        System.out.print(reset);
+      } else {
+        return !reset;
+      }
+    }
+    return reset;
   }
 
   public void setZero () {

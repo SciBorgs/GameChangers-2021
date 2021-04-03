@@ -1,20 +1,21 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Robot;
 
 public class ToggleFlywheelCommand extends CommandBase {
-    private IntakeSubsystem intakeSubsystem;
-
-    public ToggleFlywheelCommand(IntakeSubsystem intakeSubsystem)
+    public ToggleFlywheelCommand()
     {
-        this.intakeSubsystem = intakeSubsystem;
-
-        addRequirements(intakeSubsystem);
+        addRequirements(Robot.intakeSubsystem);
     }
 
     @Override public void execute()
     {
-        this.intakeSubsystem.toggleFlywheel();
+        Robot.intakeSubsystem.toggleFlywheel();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 }

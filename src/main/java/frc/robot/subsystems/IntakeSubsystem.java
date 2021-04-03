@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -11,32 +12,32 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private SciSpark flywheelSpark;
     private boolean flywheelSpinning;
-    private final double FLYWHEEL_SPEED = 0.1;
+    private final double FLYWHEEL_SPEED = 1.0;
 
-    private SciSpark liftSpark;
-    private CANEncoder liftEncoder;
+    public SciSpark liftSpark;
+    public CANEncoder liftEncoder;
     private PID liftPID;
     private double intakeSetpoint;
-    private double intakeAngleChange = Math.toRadians(40); //The angle between the up and down positions of the intake
+    private double intakeAngleChange = Math.toRadians(95); //The angle between the up and down positions of the intake
     private final double intakeStartingAngle = Math.toRadians(10); //Set to some positive value so that PID does not flip out around 0
     private final double liftTolerance = Math.toRadians(5);
 
     public IntakeSubsystem() {
-        final double FLYWHEEL_SPARK_GEAR_RATIO = 1.0 / 1;
+        final double FLYWHEEL_SPARK_GEAR_RATIO = 9.0 / 1;
         flywheelSpinning = false;
 
-        final double LIFT_SPARK_GEAR_RATIO = 1.0 / 1;
-        final double LIFT_ENCODER_GEAR_RATIO = 1.0 / 1; // wheel rotation to encoder rotation
+        final double LIFT_SPARK_GEAR_RATIO = 1.0 / 63; // wheel rotation to encoder rotation
         intakeSetpoint = intakeStartingAngle;
 
-
         flywheelSpark = new SciSpark(RobotMap.INTAKE_FLYWHEEL_SPARK, FLYWHEEL_SPARK_GEAR_RATIO);
+        flywheelSpark.setInverted(true);
         liftSpark = new SciSpark(RobotMap.INTAKE_LIFT_SPARK, LIFT_SPARK_GEAR_RATIO);
+        liftSpark.setInverted(true);
+        liftSpark.setIdleMode(IdleMode.kCoast);
         liftEncoder = liftSpark.getEncoder();
         liftEncoder.setPosition(intakeStartingAngle);
-        liftEncoder.setPositionConversionFactor(2 * Math.PI * LIFT_ENCODER_GEAR_RATIO);
 
-        liftPID = new PID(0.3, 0, 0);
+        liftPID = new PID(0.1, 0, 0);
     }
 
     public void toggleFlywheel() {
@@ -58,6 +59,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void moveIntakeToPosition() {
         liftSpark.set(liftPID.getOutput(intakeSetpoint, liftEncoder.getPosition()));
+    }
+
+    public void stopIntakeLift() {
+        liftSpark.set(0);
     }
 
     public boolean isLiftClose() {
