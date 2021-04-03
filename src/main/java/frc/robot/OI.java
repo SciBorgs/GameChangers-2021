@@ -5,11 +5,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.intake.ToggleFlywheelCommand;
 import frc.robot.commands.intake.ToggleIntakePositionCommand;
 import frc.robot.commands.swerve.SwerveResetModulesCommand;
+import frc.robot.commands.hopper.ToggleHopperCommand;
 import frc.robot.commands.intake.DummyIntakeCommand;
 
 public class OI {
     public XboxController xboxController;
-    public JoystickButton toggleFlywheelButton, toggleIntakePositionButton, resetModuleButton;
+    public JoystickButton toggleFlywheelButton, toggleIntakePositionButton, toggleHopperButton, resetModuleButton;
 
     public OI() {
         System.out.println("OI constructor");
@@ -24,6 +25,9 @@ public class OI {
 
         resetModuleButton = new JoystickButton(xboxController, RobotMap.XBOX_Y);
         resetModuleButton.whenActive(new SwerveResetModulesCommand());
+
+        toggleHopperButton = new JoystickButton(xboxController, RobotMap.XBOX_X);
+        toggleHopperButton.whenActive(new ToggleHopperCommand());
     }
 
     public double getXboxLeftX() {
