@@ -12,21 +12,25 @@ import frc.robot.util.PID;
 import frc.robot.hardware.SciPigeon;
 import frc.robot.commands.intake.ToggleFlywheelCommand;
 import frc.robot.commands.intake.ToggleIntakePositionCommand;
+import frc.robot.commands.hopper.ToggleHopperCommand;
 import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
 
 public class Robot extends TimedRobot
 {
   private SwerveSubsystem swerveSubsystem;
   private SwerveJoystickCommand swerveJoystickCommand;
   private IntakeSubsystem intakeSubsystem;
+  private HopperSubsystem hopperSubsystem;
   private ToggleFlywheelCommand toggleFlywheelCommand;
   private ToggleIntakePositionCommand toggleIntakePositionCommand;
+  private ToggleHopperCommand toggleHopperCommand;
   private XboxController xboxController;
-  private JoystickButton toggleIntakeFlywheelButton, toggleIntakePositionButton;
+  private JoystickButton toggleIntakeFlywheelButton, toggleIntakePositionButton, toggleHopperButton;
 
 
   private NetworkTableInstance networkTables;
@@ -51,6 +55,7 @@ public class Robot extends TimedRobot
     swerveSubsystem       = new SwerveSubsystem();
     swerveJoystickCommand = new SwerveJoystickCommand(swerveSubsystem);
     intakeSubsystem       = new IntakeSubsystem();
+    hopperSubsystem       = new HopperSubsystem();
     //toggleFlywheelCommand = new ToggleFlywheelCommand(intakeSubsystem);
     //toggleIntakePositionCommand = new ToggleIntakePositionCommand(intakeSubsystem);
 
@@ -59,7 +64,8 @@ public class Robot extends TimedRobot
     toggleIntakeFlywheelButton.whenPressed(new ToggleFlywheelCommand(intakeSubsystem));
     toggleIntakePositionButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
     toggleIntakePositionButton.whenPressed(new ToggleIntakePositionCommand(intakeSubsystem));
-
+    toggleHopperButton = new JoystickButton(xboxController, XboxController.Button.kX.value);
+    toggleHopperButton.whenPressed(new ToggleHopperCommand(hopperSubsystem));
 
     //steeringSpark1 = new SciSpark(4, STEERING_SPARK_GEAR_RATIO);
     //shooterSpark1 = new SciSpark(15, SHOOTER_SPARK_GEAR_RATIO);
