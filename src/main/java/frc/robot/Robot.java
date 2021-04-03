@@ -17,9 +17,9 @@ public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
 
   public static OI oi = new OI();
-  //public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
 
   public static NetworkTableInstance networkTables;
   public static NetworkTable visionTable;

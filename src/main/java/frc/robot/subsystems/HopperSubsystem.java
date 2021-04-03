@@ -1,17 +1,17 @@
 package frc.robot.subsystems;
 
 import frc.robot.hardware.SciSpark;
-
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
 public class HopperSubsystem extends SubsystemBase{
     
     public SciSpark hopperSpark;
-    private static final double MAX_SPEED = 10; // Change this value
+    private static final double MAX_SPEED = .3; // Change this value
     private boolean isMaxSpeed;
 
     public HopperSubsystem() {
-        this.hopperSpark = new SciSpark(RobotMap.hopperSpark);
+        this.hopperSpark = new SciSpark(RobotMap.HOPPER_SPARK);
         this.isMaxSpeed = false;
     }
 
