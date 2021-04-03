@@ -87,9 +87,8 @@ public class SwerveSubsystem extends SubsystemBase
     if((rawX < .2) && (rawX > -.2) &&
        (rawY < .2) && (rawY > -.2) &&
        (rawRot < .2) && (rawRot > -.2)){
-      x = 0;
-      y = 0;
-      rot = 0;
+      setZero();
+      return;
     } else if ((rawRot < .2) && (rawRot > -.2)){
       rot = 0;
     }
@@ -200,6 +199,21 @@ public class SwerveSubsystem extends SubsystemBase
 
       // System.out.println("desSteeringAngle " + i + ": " + mod.desiredSteeringAngle);
     }
+  }
+
+  public void resetModulePosition() {
+    drive(0,0,0);
+  }
+
+  public boolean areModulesReset() {
+    boolean done = true;
+    for (int i = 0; i < MODULE_COUNT; ++i) {
+      Module mod = modules[i];
+      if (Math.toDegrees(mod.steeringEncoder.getAngle()) > 10) {
+        return !done;
+      }
+    }
+    return done;
   }
 
   public void setZero () {
