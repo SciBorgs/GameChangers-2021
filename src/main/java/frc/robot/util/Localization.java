@@ -63,7 +63,7 @@ public class Localization {
 
     // Getting individual speeds
     double FWD = chassisSpeeds.vxMetersPerSecond;
-    double STR = chassisSpeeds.vyMetersPerSecond;
+    double STR = chassisSpeeds.vyMetersPerSecond; //  multiply by -1 here maybe? pos y means left for wpilib (or it did for the module setup)
     double ROT = chassisSpeeds.omegaRadiansPerSecond;
     //if (FWD != 0 || STR != 0 || ROT != 0) {
     //  System.out.println("FWD: " + FWD + "\tSTR: " + STR + "\tROT " + ROT);

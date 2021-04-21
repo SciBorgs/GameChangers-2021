@@ -86,7 +86,7 @@ public class Robot extends TimedRobot
 
   @Override public void autonomousInit() {
     Auto.start();
-    Auto.setCurrWaypoint(currDestination);
+    Auto.setCurrDestination(currDestination);
   }
 
   @Override public void autonomousPeriodic() {

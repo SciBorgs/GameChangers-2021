@@ -13,8 +13,8 @@ public class Auto {
         headingPID = new PID (0.5, 0, 0);
     }
 
-    public static void setCurrWaypoint (Waypoint currDestination) {
-        currDestination = currDestination;
+    public static void setCurrDestination (Waypoint newDestination) {
+        currDestination = newDestination;
     }
 
     public static void autoMovement() {
