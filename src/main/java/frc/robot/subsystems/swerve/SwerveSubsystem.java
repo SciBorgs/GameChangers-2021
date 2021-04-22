@@ -164,8 +164,9 @@ public class SwerveSubsystem extends SubsystemBase
     for (int i = 0; i < MODULE_COUNT; ++i) {
       Module mod = modules[i];
       System.out.println(mod.steeringEncoder.getAngle());
-      if(Math.toDegrees(mod.steeringEncoder.getAngle()) < 185 && 
-        (Math.toDegrees(mod.steeringEncoder.getAngle()) > 175)) {
+      if ((Math.toDegrees(mod.steeringEncoder.getAngle()) < 185 && (Math.toDegrees(mod.steeringEncoder.getAngle()) > 175)))
+       || (Math.toDegrees(mod.steeringEncoder.getAngle()) < 5  && (Math.toDegrees(mod.steeringEncoder.getAngle()) > 355))
+      {
         System.out.print(reset);
       } else {
         return !reset;
