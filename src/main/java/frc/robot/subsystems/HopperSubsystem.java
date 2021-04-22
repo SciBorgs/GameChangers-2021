@@ -7,7 +7,7 @@ import frc.robot.RobotMap;
 public class HopperSubsystem extends SubsystemBase{
     
     public SciSpark hopperSpark;
-    private static final double MAX_SPEED = .5; // Change this value
+    private static final double MAX_SPEED = .7; // Change this value
     private boolean isMaxSpeed;
 
     public HopperSubsystem() {

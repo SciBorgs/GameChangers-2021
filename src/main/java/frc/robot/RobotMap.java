@@ -24,12 +24,12 @@ public final class RobotMap
 
   // *******************HOPPER******************//
 
-  public static final int HOPPER_SPARK = -1;
+  public static final int HOPPER_SPARK = 9;
 
   // *******************SHOOTER******************//
 
-    public static final int SHOOTER_LEFT_SPARK = -1;
-    public static final int SHOOTER_RIGHT_SPARK = -1;
+    public static final int SHOOTER_LEFT_SPARK = 15;
+    public static final int SHOOTER_RIGHT_SPARK = 10;
     public static final int HOOD_SPARK = -1;
     public static final int HOOD_ENCODER = -1;
     

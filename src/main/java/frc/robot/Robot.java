@@ -4,7 +4,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
@@ -106,7 +105,7 @@ public class Robot extends TimedRobot
 
     // shooterSpark1.set(.1);
     // shooterSpark2.set(.1);
-
+    System.out.println(Robot.shooterSubsystem.shooterRightSpark.getEncoder().getPosition());
   }
 
   @Override public void testInit() {}
