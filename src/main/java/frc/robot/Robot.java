@@ -9,13 +9,9 @@ import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.IntakeSubsystem;
-<<<<<<< Updated upstream
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
-=======
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
->>>>>>> Stashed changes
 
 public class Robot extends TimedRobot
 {

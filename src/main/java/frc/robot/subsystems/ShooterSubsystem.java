@@ -4,10 +4,13 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 
 public class ShooterSubsystem extends SubsystemBase {
     public SciSpark shooterLeftSpark, shooterRightSpark;
+    public SciSpark hoodSpark;
+    public SciAbsoluteEncoder hoodEncoder;
     private static final double SHOOTER_SPEED = 0.1;
     private boolean flywheelTurning;
 
@@ -16,6 +19,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterRightSpark = new SciSpark(RobotMap.SHOOTER_RIGHT_SPARK, 1);
         flywheelTurning = false;
         shooterRightSpark.setIdleMode(IdleMode.kCoast);
+        hoodSpark = new SciSpark(RobotMap.HOOD_SPARK, 1/600);
+        hoodEncoder = new SciAbsoluteEncoder(RobotMap.HOOD_ENCODER, 1/600);
     };
 
     public void toggleShooter() {
