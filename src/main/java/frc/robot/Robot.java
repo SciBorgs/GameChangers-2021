@@ -1,16 +1,16 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.util.PID;
 import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.util.PID;
 
 public class Robot extends TimedRobot
 {

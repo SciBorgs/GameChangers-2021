@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.swerve;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.Pair;
@@ -14,46 +14,10 @@ import frc.robot.hardware.SciPigeon;
 public class SwerveSubsystem extends SubsystemBase
 {
   private final int MODULE_COUNT = RobotMap.SWERVE_MODULE_LUT.length;
+  private final double JOYSTICK_LIMITER = 2.0 / 5;
 
   private SciPigeon pigeon = new SciPigeon(20);
   private boolean useGyro = true;
-
-  private final double JOYSTICK_LIMITER = 2.0 / 5;
-  private static class Module
-  {
-    private SciSpark drivenSpark;
-    private SciSpark steeringSpark;
-    private SciAbsoluteEncoder steeringEncoder;
-    private PID steeringAnglePID;
-
-    private double desiredWheelSpeed;
-    private double desiredSteeringAngle;
-
-    public Module(int drivenSparkPort,
-                  int steeringSparkPort,
-                  int steeringEncoderPort,
-                  boolean flipSteeringEncoder)
-    {
-      final double DRIVEN_SPARK_GEAR_RATIO     = 3.0 / 40;
-      final double STEERING_SPARK_GEAR_RATIO   = 1.0 / 60;
-      final double STEERING_ENCODER_GEAR_RATIO = 1.0 / 5;
-
-      /* clang-format off */
-      drivenSpark     = new SciSpark(drivenSparkPort, DRIVEN_SPARK_GEAR_RATIO);
-      steeringSpark   = new SciSpark(steeringSparkPort, STEERING_SPARK_GEAR_RATIO);
-      
-      steeringEncoder = new SciAbsoluteEncoder(steeringEncoderPort,
-                                               STEERING_ENCODER_GEAR_RATIO,
-                                               Math.toRadians(0),
-                                               flipSteeringEncoder);
-      System.out.println("initial angle: " + Math.toDegrees(steeringEncoder.getAngle()));
-
-      steeringAnglePID = new PID(0.82, 0, 0);
-
-      /* clang-format on */
-    }
-  }
-
   public Module[] modules;
 
   public SwerveSubsystem()
@@ -176,10 +140,10 @@ public class SwerveSubsystem extends SubsystemBase
       //                   " AND " + Math.toDegrees(mod.desiredSteeringAngle) +
       //                   " DEGREES");                  
 
-      // optimize angle code
 
       mod.drivenSpark.set(mod.desiredWheelSpeed);
       
+      // optimize angle code
       double difference_angle = mod.desiredSteeringAngle - mod.steeringEncoder.getAngle();
       if (Math.abs(difference_angle) > Math.PI) {
         double sign = Math.signum(difference_angle);
