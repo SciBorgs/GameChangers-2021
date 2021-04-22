@@ -12,12 +12,14 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.HopperSubsystem;
 
 public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   public static ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
 
   public static OI oi = new OI();
   //public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
