@@ -9,13 +9,19 @@ import frc.robot.commands.swerve.SwerveJoystickCommand;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
 import frc.robot.subsystems.IntakeSubsystem;
+<<<<<<< Updated upstream
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.util.PID;
+=======
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
+>>>>>>> Stashed changes
 
 public class Robot extends TimedRobot
 {
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   public static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  public static ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
 
   public static OI oi = new OI();
   //public static SwerveJoystickCommand swerveJoystickCommand = new SwerveJoystickCommand();
