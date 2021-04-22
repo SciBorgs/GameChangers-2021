@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.hardware.SciAbsoluteEncoder;
 import frc.robot.hardware.SciSpark;
+import frc.robot.util.PID;
 
 public class ShooterSubsystem extends SubsystemBase {
     public SciSpark shooterLeftSpark, shooterRightSpark;
@@ -30,5 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
             shooterLeftSpark.set(SHOOTER_SPEED);
         }
         flywheelTurning = !flywheelTurning;
+    }
+
+    public void setHoodSpeed(double speed) {
+        hoodSpark.set(speed);
     }
 }
