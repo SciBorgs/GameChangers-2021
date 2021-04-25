@@ -11,6 +11,9 @@ public class LowerHoodAngleCommand extends CommandBase{
         Robot.shooterSubsystem.setHoodSpeed(-0.01);
     }
     @Override public boolean isFinished() {
-        return true;
+        return false;
+    }
+    @Override public void end(boolean interrupted) {
+        Robot.shooterSubsystem.setHoodSpeed(0.0);
     }
 }
