@@ -30,7 +30,7 @@ public final class RobotMap
 
     public static final int SHOOTER_LEFT_SPARK = 15;
     public static final int SHOOTER_RIGHT_SPARK = 10;
-    public static final int HOOD_SPARK = -1;
+    public static final int HOOD_SPARK = 14;
     public static final int HOOD_ENCODER = -1;
     
     // *****************XBOX*****************//
@@ -42,17 +42,17 @@ public final class RobotMap
     public static final int XBOX_X = 1;
     public static final int XBOX_Y = 4;
   
-    public static final int XBOX_BUMPER_LEFT  = -1;
-    public static final int XBOX_BUMPER_RIGHT = -1;
+    public static final int XBOX_BUMPER_LEFT  = 5;
+    public static final int XBOX_BUMPER_RIGHT = 6;
   
-    public static final int XBOX_BACK  = -1;
-    public static final int XBOX_START = -1;
+    public static final int XBOX_BACK  = 9;
+    public static final int XBOX_START = 10;
   
     public static final int XBOX_STICK_LEFT_BUTTON  = -1;
     public static final int XBOX_STICK_RIGHT_BUTTON = -1;
   
-    public static final int XBOX_TRIGGER_LEFT  = -1;
-    public static final int XBOX_TRIGGER_RIGHT = -1;
+    public static final int XBOX_TRIGGER_LEFT  = 7;
+    public static final int XBOX_TRIGGER_RIGHT = 8;
   
     public static final int XBOX_LEFT_JOY_X = 0;
     public static final int XBOX_LEFT_JOY_Y = 1;

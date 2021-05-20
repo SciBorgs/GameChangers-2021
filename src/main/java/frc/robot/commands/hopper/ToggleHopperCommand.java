@@ -11,12 +11,17 @@ public class ToggleHopperCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.hopperSubsystem.toggleHopper();
-        System.out.println("hopper");
+        Robot.hopperSubsystem.setHopperSpeed(0.7);
+        System.out.println("Toggle Hopper Execute");
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
+    }
+
+    @Override public void end(boolean interrupted) {
+        Robot.hopperSubsystem.setHopperSpeed(0.0);
+        System.out.println("Toggle Hopper END");
     }
 }

@@ -8,12 +8,12 @@ public class RaiseHoodAngleCommand extends CommandBase{
         addRequirements(Robot.shooterSubsystem);
     }
     @Override public void execute() {
-        Robot.shooterSubsystem.setHoodSpeed(0.01);
+        Robot.shooterSubsystem.setHoodSpeed(0.1);
     }
-    @Override public boolean isFinished() {
-        return false;
-    }
-    @Override public void end(boolean interrupted) {
+    @Override public boolean isFinished() {                              
+               return false;
+    }                                                                                                                                  
+    @Override public void end(boolean interrupted) {                  
         Robot.shooterSubsystem.setHoodSpeed(0.0);
     }
 }

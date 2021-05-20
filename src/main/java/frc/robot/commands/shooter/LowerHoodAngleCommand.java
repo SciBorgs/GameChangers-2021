@@ -8,7 +8,7 @@ public class LowerHoodAngleCommand extends CommandBase{
         addRequirements(Robot.shooterSubsystem);
     }
     @Override public void execute() {
-        Robot.shooterSubsystem.setHoodSpeed(-0.01);
+        Robot.shooterSubsystem.setHoodSpeed(-0.1);
     }
     @Override public boolean isFinished() {
         return false;

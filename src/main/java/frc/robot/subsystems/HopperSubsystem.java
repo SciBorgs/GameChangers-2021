@@ -16,6 +16,10 @@ public class HopperSubsystem extends SubsystemBase{
         this.isMaxSpeed = false;
     }
 
+    public void setHopperSpeed(double speed) {
+        this.hopperSpark.set(speed);
+    }
+
     public void toggleHopper() {
         if (this.isMaxSpeed) {
             this.hopperSpark.set(0);

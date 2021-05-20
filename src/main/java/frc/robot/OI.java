@@ -7,28 +7,33 @@ import frc.robot.commands.intake.ToggleIntakePositionCommand;
 import frc.robot.commands.swerve.SwerveResetModulesCommand;
 import frc.robot.commands.shooter.LowerHoodAngleCommand;
 import frc.robot.commands.shooter.RaiseHoodAngleCommand;
+import frc.robot.commands.shooter.ShooterToggleCommand;
 import frc.robot.commands.hopper.ToggleHopperCommand;
 
 public class OI {
     public XboxController xboxController;
-    public JoystickButton toggleFlywheelButton, toggleIntakePositionButton, resetModuleButton, toggleHopperButton, raiseHoodButton, lowerHoodButton;
+    public JoystickButton toggleFlywheelButton, toggleIntakePositionButton, resetModuleButton, toggleHopperButton, raiseHoodButton, lowerHoodButton, toggleShooterButton;
 
     public OI() {
         System.out.println("OI constructor");
 
         xboxController = new XboxController(RobotMap.XBOX_CONTROLLER);
-
-        toggleFlywheelButton = new JoystickButton(xboxController, RobotMap.XBOX_A);
-        toggleFlywheelButton.whenActive(new ToggleFlywheelCommand());
         
-        toggleIntakePositionButton = new JoystickButton(xboxController, RobotMap.XBOX_B);
+        toggleFlywheelButton = new JoystickButton(xboxController, RobotMap.XBOX_B);
+        toggleFlywheelButton.whenActive(new ToggleFlywheelCommand());
+
+        toggleIntakePositionButton = new JoystickButton(xboxController, RobotMap.XBOX_BUMPER_RIGHT);
         toggleIntakePositionButton.whenActive(new ToggleIntakePositionCommand());
+        
+
+        toggleShooterButton = new JoystickButton(xboxController, RobotMap.XBOX_A);
+        toggleShooterButton.whenActive(new ShooterToggleCommand());
 
         resetModuleButton = new JoystickButton(xboxController, RobotMap.XBOX_Y);
         resetModuleButton.whenActive(new SwerveResetModulesCommand());
 
         toggleHopperButton = new JoystickButton(xboxController, RobotMap.XBOX_X);
-        toggleHopperButton.whenActive(new ToggleHopperCommand());
+        toggleHopperButton.whenHeld(new ToggleHopperCommand());
 
         raiseHoodButton = new JoystickButton(xboxController, RobotMap.XBOX_TRIGGER_LEFT);
         raiseHoodButton.whenHeld(new RaiseHoodAngleCommand());

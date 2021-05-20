@@ -105,7 +105,7 @@ public class Robot extends TimedRobot
 
     // shooterSpark1.set(.1);
     // shooterSpark2.set(.1);
-    System.out.println(Robot.shooterSubsystem.shooterRightSpark.getEncoder().getPosition());
+    //System.out.println(Robot.shooterSubsystem.shooterRightSpark.getEncoder().getPosition());
   }
 
   @Override public void testInit() {}
